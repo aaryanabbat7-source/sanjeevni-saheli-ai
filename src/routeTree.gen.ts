@@ -18,6 +18,7 @@ import { Route as ChatRouteImport } from './routes/chat'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as EmployeeIndexRouteImport } from './routes/employee.index'
 import { Route as TopicKeyRouteImport } from './routes/topic.$key'
+import { Route as OnboardingPasswordRouteImport } from './routes/onboarding.password'
 import { Route as OnboardingNameRouteImport } from './routes/onboarding.name'
 import { Route as OnboardingMobileRouteImport } from './routes/onboarding.mobile'
 import { Route as OnboardingLanguageRouteImport } from './routes/onboarding.language'
@@ -70,6 +71,11 @@ const EmployeeIndexRoute = EmployeeIndexRouteImport.update({
 const TopicKeyRoute = TopicKeyRouteImport.update({
   id: '/topic/$key',
   path: '/topic/$key',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingPasswordRoute = OnboardingPasswordRouteImport.update({
+  id: '/onboarding/password',
+  path: '/onboarding/password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OnboardingNameRoute = OnboardingNameRouteImport.update({
@@ -129,6 +135,7 @@ export interface FileRoutesByFullPath {
   '/onboarding/language': typeof OnboardingLanguageRoute
   '/onboarding/mobile': typeof OnboardingMobileRoute
   '/onboarding/name': typeof OnboardingNameRoute
+  '/onboarding/password': typeof OnboardingPasswordRoute
   '/topic/$key': typeof TopicKeyRoute
   '/employee/': typeof EmployeeIndexRoute
 }
@@ -148,6 +155,7 @@ export interface FileRoutesByTo {
   '/onboarding/language': typeof OnboardingLanguageRoute
   '/onboarding/mobile': typeof OnboardingMobileRoute
   '/onboarding/name': typeof OnboardingNameRoute
+  '/onboarding/password': typeof OnboardingPasswordRoute
   '/topic/$key': typeof TopicKeyRoute
   '/employee': typeof EmployeeIndexRoute
 }
@@ -168,6 +176,7 @@ export interface FileRoutesById {
   '/onboarding/language': typeof OnboardingLanguageRoute
   '/onboarding/mobile': typeof OnboardingMobileRoute
   '/onboarding/name': typeof OnboardingNameRoute
+  '/onboarding/password': typeof OnboardingPasswordRoute
   '/topic/$key': typeof TopicKeyRoute
   '/employee/': typeof EmployeeIndexRoute
 }
@@ -189,6 +198,7 @@ export interface FileRouteTypes {
     | '/onboarding/language'
     | '/onboarding/mobile'
     | '/onboarding/name'
+    | '/onboarding/password'
     | '/topic/$key'
     | '/employee/'
   fileRoutesByTo: FileRoutesByTo
@@ -208,6 +218,7 @@ export interface FileRouteTypes {
     | '/onboarding/language'
     | '/onboarding/mobile'
     | '/onboarding/name'
+    | '/onboarding/password'
     | '/topic/$key'
     | '/employee'
   id:
@@ -227,6 +238,7 @@ export interface FileRouteTypes {
     | '/onboarding/language'
     | '/onboarding/mobile'
     | '/onboarding/name'
+    | '/onboarding/password'
     | '/topic/$key'
     | '/employee/'
   fileRoutesById: FileRoutesById
@@ -247,6 +259,7 @@ export interface RootRouteChildren {
   OnboardingLanguageRoute: typeof OnboardingLanguageRoute
   OnboardingMobileRoute: typeof OnboardingMobileRoute
   OnboardingNameRoute: typeof OnboardingNameRoute
+  OnboardingPasswordRoute: typeof OnboardingPasswordRoute
   TopicKeyRoute: typeof TopicKeyRoute
   EmployeeIndexRoute: typeof EmployeeIndexRoute
 }
@@ -314,6 +327,13 @@ declare module '@tanstack/react-router' {
       path: '/topic/$key'
       fullPath: '/topic/$key'
       preLoaderRoute: typeof TopicKeyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding/password': {
+      id: '/onboarding/password'
+      path: '/onboarding/password'
+      fullPath: '/onboarding/password'
+      preLoaderRoute: typeof OnboardingPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/onboarding/name': {
@@ -391,9 +411,20 @@ const rootRouteChildren: RootRouteChildren = {
   OnboardingLanguageRoute: OnboardingLanguageRoute,
   OnboardingMobileRoute: OnboardingMobileRoute,
   OnboardingNameRoute: OnboardingNameRoute,
+  OnboardingPasswordRoute: OnboardingPasswordRoute,
   TopicKeyRoute: TopicKeyRoute,
   EmployeeIndexRoute: EmployeeIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

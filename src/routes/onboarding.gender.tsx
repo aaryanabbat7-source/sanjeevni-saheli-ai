@@ -23,9 +23,13 @@ function GenderPage() {
     { key: "other", label: dict.other, icon: "🌈", gradient: "bg-gradient-pregnancy" },
   ];
 
-  function finish() {
+  const [busy, setBusy] = useState(false);
+
+  async function finish() {
     if (!draft.gender) return;
-    const res = commitDraft();
+    setBusy(true);
+    const res = await commitDraft();
+    setBusy(false);
     if ("error" in res) { setError(res.error); return; }
     nav({ to: "/dashboard" });
   }

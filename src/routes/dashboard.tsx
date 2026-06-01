@@ -76,21 +76,38 @@ function Dashboard() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.06 }}
               >
-                <Link
-                  to="/topic/$key"
-                  params={{ key: topic.key }}
-                  className="block rounded-3xl p-6 text-white relative overflow-hidden shadow-card hover:shadow-glow transition hover:-translate-y-1.5"
-                >
-                  <div className={`absolute inset-0 ${topic.gradient}`} />
-                  <div className="relative">
-                    <div className="text-4xl">{topic.icon}</div>
-                    <h3 className="mt-4 font-bold text-lg leading-tight">{ti.title}</h3>
-                    <p className="mt-1 text-sm text-white/80">{ti.desc}</p>
-                    <div className="mt-4 inline-flex items-center gap-1 text-xs font-semibold bg-white/20 rounded-full px-3 py-1">
-                      {dict.exploreCta} <ArrowRight className="size-3" />
+                {topic.key === "schemes" ? (
+                  <Link
+                    to="/schemes"
+                    className="block rounded-3xl p-6 text-white relative overflow-hidden shadow-card hover:shadow-glow transition hover:-translate-y-1.5"
+                  >
+                    <div className={`absolute inset-0 ${topic.gradient}`} />
+                    <div className="relative">
+                      <div className="text-4xl">{topic.icon}</div>
+                      <h3 className="mt-4 font-bold text-lg leading-tight">{ti.title}</h3>
+                      <p className="mt-1 text-sm text-white/80">{ti.desc}</p>
+                      <div className="mt-4 inline-flex items-center gap-1 text-xs font-semibold bg-white/20 rounded-full px-3 py-1">
+                        {dict.exploreCta} <ArrowRight className="size-3" />
+                      </div>
                     </div>
-                  </div>
-                </Link>
+                  </Link>
+                ) : (
+                  <Link
+                    to="/topic/$key"
+                    params={{ key: topic.key }}
+                    className="block rounded-3xl p-6 text-white relative overflow-hidden shadow-card hover:shadow-glow transition hover:-translate-y-1.5"
+                  >
+                    <div className={`absolute inset-0 ${topic.gradient}`} />
+                    <div className="relative">
+                      <div className="text-4xl">{topic.icon}</div>
+                      <h3 className="mt-4 font-bold text-lg leading-tight">{ti.title}</h3>
+                      <p className="mt-1 text-sm text-white/80">{ti.desc}</p>
+                      <div className="mt-4 inline-flex items-center gap-1 text-xs font-semibold bg-white/20 rounded-full px-3 py-1">
+                        {dict.exploreCta} <ArrowRight className="size-3" />
+                      </div>
+                    </div>
+                  </Link>
+                )}
               </motion.div>
             );
           })}

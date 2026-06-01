@@ -35,7 +35,7 @@ function Landing() {
           <a href="#features" className="hover:text-foreground transition">Features</a>
           <a href="#topics" className="hover:text-foreground transition">Topics</a>
           <a href="#impact" className="hover:text-foreground transition">Impact</a>
-          <a href="#tgelf" className="hover:text-foreground transition">TGELF</a>
+          <a href="#mission" className="hover:text-foreground transition">Mission</a>
         </nav>
         <div className="flex items-center gap-2">
           {loggedIn ? (

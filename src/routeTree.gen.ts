@@ -98,9 +98,9 @@ const OnboardingDobRoute = OnboardingDobRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const EmployeeLoginRoute = EmployeeLoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => EmployeeRoute,
+  id: '/employee/login',
+  path: '/employee/login',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiTranslateRoute = ApiTranslateRouteImport.update({
   id: '/api/translate',
@@ -241,6 +241,7 @@ export interface RootRouteChildren {
   WelcomeRoute: typeof WelcomeRoute
   ApiChatRoute: typeof ApiChatRoute
   ApiTranslateRoute: typeof ApiTranslateRoute
+  EmployeeLoginRoute: typeof EmployeeLoginRoute
   OnboardingDobRoute: typeof OnboardingDobRoute
   OnboardingGenderRoute: typeof OnboardingGenderRoute
   OnboardingLanguageRoute: typeof OnboardingLanguageRoute
@@ -352,10 +353,10 @@ declare module '@tanstack/react-router' {
     }
     '/employee/login': {
       id: '/employee/login'
-      path: '/login'
+      path: '/employee/login'
       fullPath: '/employee/login'
       preLoaderRoute: typeof EmployeeLoginRouteImport
-      parentRoute: typeof EmployeeRoute
+      parentRoute: typeof rootRouteImport
     }
     '/api/translate': {
       id: '/api/translate'
@@ -384,6 +385,7 @@ const rootRouteChildren: RootRouteChildren = {
   WelcomeRoute: WelcomeRoute,
   ApiChatRoute: ApiChatRoute,
   ApiTranslateRoute: ApiTranslateRoute,
+  EmployeeLoginRoute: EmployeeLoginRoute,
   OnboardingDobRoute: OnboardingDobRoute,
   OnboardingGenderRoute: OnboardingGenderRoute,
   OnboardingLanguageRoute: OnboardingLanguageRoute,
@@ -395,13 +397,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

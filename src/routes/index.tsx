@@ -245,12 +245,12 @@ function Landing() {
         </div>
       </section>
 
-      {/* TGELF */}
-      <section id="tgelf" className="mx-auto max-w-6xl px-5 py-12">
+      {/* Mission */}
+      <section id="mission" className="mx-auto max-w-6xl px-5 py-12">
         <div className="rounded-3xl glass p-8 md:p-10 flex flex-col md:flex-row gap-6 items-center">
           <div className="size-20 rounded-2xl bg-gradient-primary grid place-items-center text-3xl shadow-glow">🌍</div>
           <div className="flex-1 text-center md:text-left">
-            <div className="text-xs uppercase tracking-widest text-primary font-bold">TGELF Youth Leader 2026</div>
+            <div className="text-xs uppercase tracking-widest text-primary font-bold">Our Mission</div>
             <h3 className="mt-1 text-2xl font-bold">A youth-led initiative for a healthier India</h3>
             <p className="mt-2 text-muted-foreground text-sm max-w-2xl">
               Sanjeevni Saheli AI is built as a non-profit, open-access health companion. Our mission: empower every woman, mother and family with the right health information, in their own language.

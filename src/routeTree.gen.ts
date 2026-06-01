@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as SchemesRouteImport } from './routes/schemes'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ChatsRouteImport } from './routes/chats'
@@ -36,6 +37,11 @@ const WelcomeRoute = WelcomeRouteImport.update({
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SchemesRoute = SchemesRouteImport.update({
+  id: '/schemes',
+  path: '/schemes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -125,6 +131,7 @@ export interface FileRoutesByFullPath {
   '/chats': typeof ChatsRoute
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
+  '/schemes': typeof SchemesRoute
   '/settings': typeof SettingsRoute
   '/welcome': typeof WelcomeRoute
   '/api/chat': typeof ApiChatRoute
@@ -145,6 +152,7 @@ export interface FileRoutesByTo {
   '/chats': typeof ChatsRoute
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
+  '/schemes': typeof SchemesRoute
   '/settings': typeof SettingsRoute
   '/welcome': typeof WelcomeRoute
   '/api/chat': typeof ApiChatRoute
@@ -166,6 +174,7 @@ export interface FileRoutesById {
   '/chats': typeof ChatsRoute
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
+  '/schemes': typeof SchemesRoute
   '/settings': typeof SettingsRoute
   '/welcome': typeof WelcomeRoute
   '/api/chat': typeof ApiChatRoute
@@ -188,6 +197,7 @@ export interface FileRouteTypes {
     | '/chats'
     | '/dashboard'
     | '/login'
+    | '/schemes'
     | '/settings'
     | '/welcome'
     | '/api/chat'
@@ -208,6 +218,7 @@ export interface FileRouteTypes {
     | '/chats'
     | '/dashboard'
     | '/login'
+    | '/schemes'
     | '/settings'
     | '/welcome'
     | '/api/chat'
@@ -228,6 +239,7 @@ export interface FileRouteTypes {
     | '/chats'
     | '/dashboard'
     | '/login'
+    | '/schemes'
     | '/settings'
     | '/welcome'
     | '/api/chat'
@@ -249,6 +261,7 @@ export interface RootRouteChildren {
   ChatsRoute: typeof ChatsRoute
   DashboardRoute: typeof DashboardRoute
   LoginRoute: typeof LoginRoute
+  SchemesRoute: typeof SchemesRoute
   SettingsRoute: typeof SettingsRoute
   WelcomeRoute: typeof WelcomeRoute
   ApiChatRoute: typeof ApiChatRoute
@@ -278,6 +291,13 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/schemes': {
+      id: '/schemes'
+      path: '/schemes'
+      fullPath: '/schemes'
+      preLoaderRoute: typeof SchemesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -401,6 +421,7 @@ const rootRouteChildren: RootRouteChildren = {
   ChatsRoute: ChatsRoute,
   DashboardRoute: DashboardRoute,
   LoginRoute: LoginRoute,
+  SchemesRoute: SchemesRoute,
   SettingsRoute: SettingsRoute,
   WelcomeRoute: WelcomeRoute,
   ApiChatRoute: ApiChatRoute,
@@ -418,3 +439,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

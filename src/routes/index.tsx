@@ -73,7 +73,7 @@ function Landing() {
             transition={{ delay: 0.1 }}
             className="inline-flex items-center gap-2 rounded-full glass px-3 py-1.5 text-xs font-semibold text-primary"
           >
-            <Sparkles className="size-3.5" /> TGELF Youth Leader 2026 Initiative
+            <Sparkles className="size-3.5" /> A youth-led healthcare initiative for India
           </motion.div>
           <h1 className="mt-5 text-4xl md:text-6xl font-extrabold leading-[1.05] tracking-tight">
             Healthcare guidance for <span className="text-gradient">every Indian family</span>

@@ -79,11 +79,11 @@ function GenderPage() {
 
         <div className="mt-10 flex justify-center">
           <button
-            disabled={!draft.gender}
+            disabled={!draft.gender || busy}
             onClick={finish}
             className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-7 py-3.5 font-semibold text-primary-foreground shadow-glow disabled:opacity-40"
           >
-            {dict.start} <ArrowRight className="size-4" />
+            {busy ? "Saving…" : dict.start} <ArrowRight className="size-4" />
           </button>
         </div>
       </div>

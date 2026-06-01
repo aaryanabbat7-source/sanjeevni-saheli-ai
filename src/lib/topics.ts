@@ -14,6 +14,7 @@ export const TOPICS: Topic[] = [
   { key: "pregnancy", icon: "🤱", gradient: "bg-gradient-pregnancy", color: "pregnancy" },
   { key: "vaccine", icon: "💉", gradient: "bg-gradient-vaccine", color: "vaccine" },
   { key: "emergency", icon: "🚨", gradient: "bg-gradient-emergency", color: "emergency" },
+  { key: "schemes", icon: "🏛️", gradient: "bg-gradient-schemes", color: "schemes" },
 ];
 
 export const EMERGENCY_KEYWORDS = [

@@ -39,6 +39,7 @@
   --color-emergency: var(--emergency);
   --color-pregnancy: var(--pregnancy);
   --color-menstrual: var(--menstrual);
+  --color-schemes: var(--schemes);
   --color-ring-offset-background: var(--background);
 }
 
@@ -82,6 +83,7 @@
   --vaccine: oklch(0.62 0.18 250);       /* blue */
   --emergency: oklch(0.58 0.24 25);      /* red */
   --pregnancy: oklch(0.58 0.22 300);     /* violet */
+  --schemes: oklch(0.62 0.18 70);        /* saffron/amber */
 
   /* Gradients */
   --gradient-primary: linear-gradient(135deg, oklch(0.68 0.22 345), oklch(0.55 0.22 320));
@@ -94,6 +96,7 @@
   --gradient-vaccine: linear-gradient(135deg, oklch(0.78 0.14 250), oklch(0.55 0.18 245));
   --gradient-emergency: linear-gradient(135deg, oklch(0.75 0.18 30), oklch(0.55 0.24 20));
   --gradient-pregnancy: linear-gradient(135deg, oklch(0.78 0.16 310), oklch(0.55 0.22 295));
+  --gradient-schemes: linear-gradient(135deg, oklch(0.78 0.16 80), oklch(0.55 0.18 50));
 
   /* Shadows */
   --shadow-soft: 0 4px 24px -8px oklch(0.55 0.22 340 / 0.18);
@@ -147,6 +150,7 @@
   .bg-gradient-vaccine { background: var(--gradient-vaccine); }
   .bg-gradient-emergency { background: var(--gradient-emergency); }
   .bg-gradient-pregnancy { background: var(--gradient-pregnancy); }
+  .bg-gradient-schemes { background: var(--gradient-schemes); }
   .shadow-soft { box-shadow: var(--shadow-soft); }
   .shadow-glow { box-shadow: var(--shadow-glow); }
   .shadow-card { box-shadow: var(--shadow-card); }

@@ -25,7 +25,7 @@ export function bcp47(lang: Lang): string {
   return map[lang];
 }
 
-export type TopicKey = "menstrual" | "nutrition" | "pregnancy" | "vaccine" | "emergency";
+export type TopicKey = "menstrual" | "nutrition" | "pregnancy" | "vaccine" | "emergency" | "schemes";
 
 export interface SubTopic { title: string; preview: string; detail: string; }
 
@@ -181,6 +181,7 @@ const en: Dict = {
     pregnancy: { title: "Pregnancy & Maternal Care", desc: "From early signs to delivery" },
     vaccine: { title: "Child Vaccination", desc: "Schedules, myths & safety" },
     emergency: { title: "Emergency Help", desc: "Helplines and first response" },
+    schemes: { title: "Govt. Schemes", desc: "Central, state & local health schemes" },
   },
   subtopics: {
     menstrual: [
@@ -219,6 +220,21 @@ const en: Dict = {
       { title: "Fainting", preview: "First response", detail: "Lay the person flat, raise legs, loosen tight clothing, ensure airflow. If unconscious for more than a minute, call 108." },
       { title: "Bleeding Emergency", preview: "Stop the bleed", detail: "Apply firm pressure with a clean cloth. Raise the injured part above the heart. Do not remove embedded objects. Call 108." },
       { title: "Severe Pain Emergency", preview: "Chest, abdomen, head", detail: "Sudden severe chest pain, severe abdominal pain, or worst-ever headache need immediate evaluation. Do not drive yourself — call 108." },
+    ],
+    schemes: [
+      { title: "PM Matru Vandana Yojana (PMMVY)", preview: "Maternity cash benefit", detail: "Conditional DBT of ₹5,000 for the first live birth (in 2 installments) and ₹6,000 for a second girl child. Apply via your ANM/ASHA or the PMMVY portal." },
+      { title: "Janani Suraksha Yojana (JSY)", preview: "Cash for institutional delivery", detail: "Cash incentive for delivering at a government hospital. Low-Performing States: ₹1,400 rural / ₹1,000 urban. High-Performing States: ₹700 rural / ₹600 urban." },
+      { title: "Janani Shishu Suraksha Karyakram (JSSK)", preview: "Zero-cost maternity care", detail: "Free drugs, diagnostics, blood, food and transport for every pregnant woman and sick infant (up to 1 year) in public health facilities." },
+      { title: "PM Surakshit Matritva Abhiyan (PMSMA)", preview: "Free check-ups on the 9th", detail: "Free specialist antenatal check-ups for 2nd/3rd trimester pregnancies on the 9th of every month. High-risk cases are tagged with red stickers and tracked." },
+      { title: "SUMAN — Surakshit Matritva Aashwasan", preview: "Right to zero-cost care", detail: "Legally backed promise of 100% zero out-of-pocket spending and zero-tolerance for service denial for mothers and newborns at public facilities." },
+      { title: "Universal Immunization Programme (UIP)", preview: "Free vaccines for 12 diseases", detail: "Free national immunization schedule covering 12 vaccine-preventable diseases. Track every dose digitally on the U-WIN portal." },
+      { title: "Mission Indradhanush (IMI)", preview: "Catch-up for missed doses", detail: "Special drives to vaccinate zero-dose children and pregnant women who missed routine immunisation, especially in hard-to-reach districts." },
+      { title: "Menstrual Hygiene Scheme (MHS)", preview: "₹6 per pack via ASHA", detail: "Under RKSK: Freedays sanitary napkins distributed to rural adolescent girls by ASHA workers at ₹6 for a pack of 6." },
+      { title: "PM Bhartiya Janaushadhi (PMBJP)", preview: "Suvidha pads at ₹1", detail: "Suvidha oxy-biodegradable sanitary pads at ₹1 per pad at Jan Aushadhi Kendras. Generic medicines also available at low cost." },
+      { title: "Saksham Anganwadi & POSHAN 2.0", preview: "Nutrition for mother & child", detail: "Umbrella scheme: hot meals + Take-Home Rations through Anganwadis, Poshan Abhiyaan against stunting, Scheme for Adolescent Girls (11–14), and Anemia Mukt Bharat IFA tablets." },
+      { title: "PM POSHAN (Mid-Day Meal)", preview: "Daily school meal", detail: "Free hot nutritionally balanced meal every school day for children in classes 1 to 8 in government and aided schools." },
+      { title: "Ayushman Bharat (PM-JAY)", preview: "₹5 lakh health cover", detail: "Free secondary and tertiary hospital care up to ₹5 lakh per family per year at empanelled hospitals. Check eligibility on the PM-JAY portal or via your nearest CSC." },
+      { title: "Emergency Numbers", preview: "112 / 108 / 102 / 104 / 181", detail: "112 — all-in-one emergency. 108 — free ambulance. 102 — free transport for pregnant women & newborns (JSSK). 104 — health helpline. 181 — women's helpline." },
     ],
   },
   registeredOn: "Registered on",
@@ -307,6 +323,7 @@ const hi: Dict = {
     pregnancy: { title: "गर्भावस्था देखभाल", desc: "शुरुआती लक्षण से प्रसव तक" },
     vaccine: { title: "बच्चों का टीकाकरण", desc: "अनुसूची, मिथक और सुरक्षा" },
     emergency: { title: "आपातकालीन सहायता", desc: "हेल्पलाइन और प्राथमिक मदद" },
+    schemes: { title: "सरकारी योजनाएँ", desc: "केंद्र, राज्य और स्थानीय स्वास्थ्य योजनाएँ" },
   },
   subtopics: {
     menstrual: [
@@ -345,6 +362,21 @@ const hi: Dict = {
       { title: "बेहोशी", preview: "पहली मदद", detail: "व्यक्ति को सीधा लिटाएँ, पैर ऊपर उठाएँ, कपड़े ढीले करें, हवा आने दें। एक मिनट से ज़्यादा बेहोश रहे तो 108 बुलाएँ।" },
       { title: "खून बहना", preview: "रक्तस्राव रोकें", detail: "साफ़ कपड़े से दबाव डालें। चोट वाले हिस्से को ऊँचा रखें। फँसी चीज़ न निकालें। 108 बुलाएँ।" },
       { title: "तेज़ दर्द आपातकाल", preview: "सीना, पेट, सिर", detail: "अचानक तेज़ सीने का दर्द, तेज़ पेट दर्द या सबसे तेज़ सिरदर्द — तुरंत 108 बुलाएँ। खुद गाड़ी न चलाएँ।" },
+    ],
+    schemes: [
+      { title: "PM मातृ वंदना योजना (PMMVY)", preview: "मातृत्व नकद सहायता", detail: "पहले जीवित जन्म पर ₹5,000 (2 किस्तों में) और दूसरी बेटी के जन्म पर ₹6,000 का सीधा बैंक हस्तांतरण। ANM/ASHA या PMMVY पोर्टल से आवेदन करें।" },
+      { title: "जननी सुरक्षा योजना (JSY)", preview: "संस्थागत प्रसव पर नकद", detail: "सरकारी अस्पताल में प्रसव पर नकद। निम्न-प्रदर्शन राज्य: ₹1,400 ग्रामीण / ₹1,000 शहरी। उच्च-प्रदर्शन राज्य: ₹700 / ₹600।" },
+      { title: "जननी शिशु सुरक्षा कार्यक्रम (JSSK)", preview: "मुफ़्त प्रसव देखभाल", detail: "हर गर्भवती महिला और बीमार शिशु (1 वर्ष तक) के लिए सरकारी अस्पताल में दवा, जाँच, खून, खाना और परिवहन पूरी तरह मुफ़्त।" },
+      { title: "PM सुरक्षित मातृत्व अभियान (PMSMA)", preview: "हर महीने 9 तारीख को", detail: "2री/3री तिमाही की गर्भवती महिलाओं के लिए हर माह 9 तारीख को विशेषज्ञ की मुफ़्त ANC जाँच। उच्च जोखिम वालों को लाल स्टिकर।" },
+      { title: "SUMAN — सुरक्षित मातृत्व आश्वासन", preview: "शून्य खर्च का अधिकार", detail: "माँ और नवजात को सरकारी सुविधा में 100% मुफ़्त देखभाल और सेवा से इनकार पर शून्य सहनशीलता का कानूनी आश्वासन।" },
+      { title: "सार्वत्रिक टीकाकरण कार्यक्रम (UIP)", preview: "12 बीमारियों से मुफ़्त सुरक्षा", detail: "12 रोकथाम योग्य बीमारियों के लिए मुफ़्त टीके। U-WIN पोर्टल पर हर डोज़ का डिजिटल रिकॉर्ड।" },
+      { title: "मिशन इंद्रधनुष (IMI)", preview: "छूटे टीकों के लिए", detail: "जिन बच्चों और गर्भवती महिलाओं को नियमित टीके नहीं मिले, उनके लिए विशेष अभियान, ख़ासकर दुर्गम क्षेत्रों में।" },
+      { title: "मासिक स्वच्छता योजना (MHS)", preview: "ASHA से ₹6 में पैक", detail: "RKSK के तहत: ग्रामीण किशोरियों को ASHA द्वारा Freedays सैनिटरी नैपकिन ₹6 में 6 पैड का पैक।" },
+      { title: "PM भारतीय जनऔषधि (PMBJP)", preview: "Suvidha पैड ₹1 में", detail: "Jan Aushadhi केंद्रों पर Suvidha ऑक्सी-बायोडिग्रेडेबल सैनिटरी पैड ₹1 प्रति पैड। सस्ती जेनेरिक दवाइयाँ भी।" },
+      { title: "सक्षम आंगनवाड़ी और POSHAN 2.0", preview: "माँ-बच्चे के लिए पोषण", detail: "आंगनवाड़ी से गरम भोजन और टेक-होम राशन, POSHAN अभियान, किशोरी योजना (11–14), Anemia Mukt Bharat के IFA टैबलेट।" },
+      { title: "PM POSHAN (मिड-डे मील)", preview: "रोज़ स्कूल में भोजन", detail: "कक्षा 1 से 8 तक के बच्चों को सरकारी/सहायता प्राप्त स्कूलों में हर दिन मुफ़्त पौष्टिक गरम भोजन।" },
+      { title: "आयुष्मान भारत (PM-JAY)", preview: "₹5 लाख का स्वास्थ्य कवर", detail: "प्रति परिवार प्रति वर्ष ₹5 लाख तक का मुफ़्त अस्पताल इलाज सूचीबद्ध अस्पतालों में। पात्रता PM-JAY पोर्टल या CSC पर जाँचें।" },
+      { title: "आपातकालीन नंबर", preview: "112 / 108 / 102 / 104 / 181", detail: "112 — सभी आपातकाल। 108 — मुफ़्त एम्बुलेंस। 102 — गर्भवती और नवजात के लिए मुफ़्त परिवहन (JSSK)। 104 — स्वास्थ्य हेल्पलाइन। 181 — महिला हेल्पलाइन।" },
     ],
   },
   registeredOn: "पंजीकरण की तिथि",
@@ -433,6 +465,7 @@ const bn: Dict = {
     pregnancy: { title: "গর্ভাবস্থা ও মাতৃযত্ন", desc: "প্রথম লক্ষণ থেকে প্রসব" },
     vaccine: { title: "শিশু টিকাদান", desc: "সূচি, ভুল ধারণা ও নিরাপত্তা" },
     emergency: { title: "জরুরি সহায়তা", desc: "হেল্পলাইন ও প্রাথমিক সাহায্য" },
+    schemes: { title: "সরকারি প্রকল্প", desc: "কেন্দ্র, রাজ্য ও স্থানীয় স্বাস্থ্য প্রকল্প" },
   },
   subtopics: {
     menstrual: [
@@ -471,6 +504,21 @@ const bn: Dict = {
       { title: "মূর্ছা", preview: "প্রথম সাড়া", detail: "ব্যক্তিকে সমতলে শোয়ান, পা উঁচু করুন, পোশাক ঢিলা করুন, বাতাস দিন। এক মিনিটের বেশি অজ্ঞান থাকলে 108 ডাকুন।" },
       { title: "রক্তপাত জরুরি", preview: "রক্ত থামান", detail: "পরিষ্কার কাপড় দিয়ে চাপ দিন। আহত অংশ উঁচু রাখুন। আটকে থাকা বস্তু সরাবেন না। 108 ডাকুন।" },
       { title: "তীব্র ব্যথা জরুরি", preview: "বুক, পেট, মাথা", detail: "হঠাৎ তীব্র বুকে ব্যথা, পেটে ব্যথা বা সবচেয়ে তীব্র মাথাব্যথা — অবিলম্বে 108 ডাকুন। নিজে গাড়ি চালাবেন না।" },
+    ],
+    schemes: [
+      { title: "PM মাতৃ বন্দনা যোজনা (PMMVY)", preview: "মাতৃত্ব নগদ সহায়তা", detail: "প্রথম জীবিত জন্মে ₹৫,০০০ (২ কিস্তিতে) ও দ্বিতীয় কন্যাসন্তানে ₹৬,০০০ সরাসরি ব্যাঙ্কে। ANM/ASHA বা PMMVY পোর্টালে আবেদন।" },
+      { title: "জননী সুরক্ষা যোজনা (JSY)", preview: "সরকারি প্রসবে নগদ", detail: "সরকারি হাসপাতালে প্রসবে নগদ। নিম্ন-পারফর্মিং রাজ্য: ₹১,৪০০ গ্রামীণ / ₹১,০০০ শহর। উচ্চ-পারফর্মিং: ₹৭০০ / ₹৬০০।" },
+      { title: "জননী শিশু সুরক্ষা কার্যক্রম (JSSK)", preview: "শূন্য খরচে প্রসব যত্ন", detail: "প্রতিটি গর্ভবতী ও অসুস্থ শিশুর (১ বছর পর্যন্ত) জন্য সরকারি হাসপাতালে ওষুধ, পরীক্ষা, রক্ত, খাবার ও পরিবহন সম্পূর্ণ বিনামূল্যে।" },
+      { title: "PM সুরক্ষিত মাতৃত্ব অভিযান (PMSMA)", preview: "প্রতি মাসের ৯ তারিখে", detail: "২য়/৩য় ত্রৈমাসিকের গর্ভবতীদের জন্য প্রতি মাসের ৯ তারিখে বিশেষজ্ঞের বিনামূল্যে ANC চেক-আপ। উচ্চ-ঝুঁকি কেস লাল স্টিকারে চিহ্নিত।" },
+      { title: "SUMAN — সুরক্ষিত মাতৃত্ব আশ্বাসন", preview: "শূন্য খরচের অধিকার", detail: "মা ও নবজাতকের জন্য সরকারি কেন্দ্রে ১০০% বিনামূল্যে যত্ন এবং পরিষেবা প্রত্যাখ্যানে শূন্য সহনশীলতার আইনি প্রতিশ্রুতি।" },
+      { title: "সর্বজনীন টিকাদান কর্মসূচি (UIP)", preview: "১২টি রোগ থেকে বিনামূল্যে রক্ষা", detail: "১২টি প্রতিরোধযোগ্য রোগের বিনামূল্যে টিকা। U-WIN পোর্টালে প্রতিটি ডোজের ডিজিটাল রেকর্ড।" },
+      { title: "মিশন ইন্দ্রধনুষ (IMI)", preview: "মিস্ড টিকার জন্য", detail: "যেসব শিশু ও গর্ভবতী নিয়মিত টিকা পাননি, তাদের জন্য বিশেষ অভিযান, বিশেষত দুর্গম অঞ্চলে।" },
+      { title: "মাসিক স্বাস্থ্যবিধি প্রকল্প (MHS)", preview: "ASHA-এর কাছে ₹৬-এ প্যাক", detail: "RKSK-এর অধীনে: গ্রামীণ কিশোরীদের ASHA দ্বারা Freedays স্যানিটারি ন্যাপকিন ৬টির প্যাক ₹৬-এ।" },
+      { title: "PM ভারতীয় জনঔষধি (PMBJP)", preview: "Suvidha প্যাড ₹১-এ", detail: "Jan Aushadhi কেন্দ্রে Suvidha অক্সি-বায়োডিগ্রেডেবল প্যাড ₹১ প্রতি প্যাড। সস্তা জেনেরিক ওষুধও।" },
+      { title: "সক্ষম অঙ্গনওয়াড়ি ও POSHAN 2.0", preview: "মা-শিশুর পুষ্টি", detail: "অঙ্গনওয়াড়ি থেকে গরম খাবার ও টেক-হোম রেশন, POSHAN অভিযান, কিশোরী যোজনা (১১–১৪), Anemia Mukt Bharat-এর IFA ট্যাবলেট।" },
+      { title: "PM POSHAN (মিড-ডে মিল)", preview: "প্রতিদিন স্কুলে খাবার", detail: "১ম থেকে ৮ম শ্রেণির শিশুদের সরকারি/সাহায্যপ্রাপ্ত স্কুলে প্রতিদিন বিনামূল্যে পুষ্টিকর গরম খাবার।" },
+      { title: "আয়ুষ্মান ভারত (PM-JAY)", preview: "₹৫ লক্ষ স্বাস্থ্য কভার", detail: "প্রতি পরিবার বছরে ₹৫ লক্ষ পর্যন্ত তালিকাভুক্ত হাসপাতালে বিনামূল্যে চিকিৎসা। পাত্রতা PM-JAY পোর্টাল বা CSC-তে দেখুন।" },
+      { title: "জরুরি নম্বর", preview: "১১২ / ১০৮ / ১০২ / ১০৪ / ১৮১", detail: "১১২ — সব জরুরি। ১০৮ — বিনামূল্যে অ্যাম্বুলেন্স। ১০২ — গর্ভবতী ও নবজাতকের জন্য বিনামূল্যে পরিবহন (JSSK)। ১০৪ — স্বাস্থ্য হেল্পলাইন। ১৮১ — মহিলা হেল্পলাইন।" },
     ],
   },
   registeredOn: "নিবন্ধনের তারিখ",

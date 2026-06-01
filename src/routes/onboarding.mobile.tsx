@@ -4,7 +4,7 @@ import { ArrowRight, ArrowLeft, Phone } from "lucide-react";
 import { useState } from "react";
 import { PageShell } from "@/components/PageShell";
 import { t } from "@/lib/i18n";
-import { setDraft, useDraft, profilesByMobile, MAX_PER_MOBILE } from "@/lib/user-store";
+import { setDraft, useDraft } from "@/lib/user-store";
 
 export const Route = createFileRoute("/onboarding/mobile")({
   component: MobilePage,
@@ -19,15 +19,14 @@ function MobilePage() {
   const [mobile, setMobile] = useState(draft.mobile ?? "");
   const [error, setError] = useState("");
 
-  const existing = MOBILE_RX.test(mobile) ? profilesByMobile(mobile).length : 0;
-  const full = existing >= MAX_PER_MOBILE;
+  const existing = 0;
+  const full = false;
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
     if (!MOBILE_RX.test(mobile)) return setError(dict.mobileInvalid);
-    if (full) return setError(dict.loginMobileFull);
     setDraft({ mobile });
-    nav({ to: "/onboarding/name" });
+    nav({ to: "/onboarding/password" });
   }
 
   return (

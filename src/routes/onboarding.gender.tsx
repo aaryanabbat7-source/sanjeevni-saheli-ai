@@ -23,9 +23,13 @@ function GenderPage() {
     { key: "other", label: dict.other, icon: "🌈", gradient: "bg-gradient-pregnancy" },
   ];
 
-  function finish() {
+  const [busy, setBusy] = useState(false);
+
+  async function finish() {
     if (!draft.gender) return;
-    const res = commitDraft();
+    setBusy(true);
+    const res = await commitDraft();
+    setBusy(false);
     if ("error" in res) { setError(res.error); return; }
     nav({ to: "/dashboard" });
   }
@@ -75,11 +79,11 @@ function GenderPage() {
 
         <div className="mt-10 flex justify-center">
           <button
-            disabled={!draft.gender}
+            disabled={!draft.gender || busy}
             onClick={finish}
             className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-7 py-3.5 font-semibold text-primary-foreground shadow-glow disabled:opacity-40"
           >
-            {dict.start} <ArrowRight className="size-4" />
+            {busy ? "Saving…" : dict.start} <ArrowRight className="size-4" />
           </button>
         </div>
       </div>

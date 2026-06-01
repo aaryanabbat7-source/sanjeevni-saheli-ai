@@ -92,6 +92,17 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  if (typeof window !== "undefined") {
+    // lazy init on first render in browser
+    import("@/lib/user-store").then((m) => m.initUserStore());
+    import("@/lib/employee-store").then((m) => m.initEmployeeStore());
+    import("@/lib/chat-store").then(({ fetchAllThreads, clearChats }) => {
+      import("@/integrations/supabase/client").then(({ supabase }) => {
+        supabase.auth.getSession().then(({ data }) => { if (data.session) void fetchAllThreads(); });
+        supabase.auth.onAuthStateChange((_e, s) => { if (s) void fetchAllThreads(); else clearChats(); });
+      });
+    });
+  }
   return (
     <QueryClientProvider client={queryClient}>
       <Outlet />

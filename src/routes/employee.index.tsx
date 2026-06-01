@@ -8,7 +8,7 @@ import { useStore, ageFromDob } from "@/lib/user-store";
 import { useChatThreads, listThreads, appendAssistantMessage, editMessageText, getThread } from "@/lib/chat-store";
 import { LANG_NAME } from "@/lib/i18n";
 
-export const Route = createFileRoute("/employee")({ component: EmployeePanel });
+export const Route = createFileRoute("/employee/")({ component: EmployeePanel });
 
 function EmployeePanel() {
   const nav = useNavigate();

@@ -12,11 +12,11 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as EmployeeRouteImport } from './routes/employee'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ChatsRouteImport } from './routes/chats'
 import { Route as ChatRouteImport } from './routes/chat'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as EmployeeIndexRouteImport } from './routes/employee.index'
 import { Route as TopicKeyRouteImport } from './routes/topic.$key'
 import { Route as OnboardingNameRouteImport } from './routes/onboarding.name'
 import { Route as OnboardingMobileRouteImport } from './routes/onboarding.mobile'
@@ -42,11 +42,6 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EmployeeRoute = EmployeeRouteImport.update({
-  id: '/employee',
-  path: '/employee',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -65,6 +60,11 @@ const ChatRoute = ChatRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmployeeIndexRoute = EmployeeIndexRouteImport.update({
+  id: '/employee/',
+  path: '/employee/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TopicKeyRoute = TopicKeyRouteImport.update({
@@ -98,9 +98,9 @@ const OnboardingDobRoute = OnboardingDobRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const EmployeeLoginRoute = EmployeeLoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => EmployeeRoute,
+  id: '/employee/login',
+  path: '/employee/login',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiTranslateRoute = ApiTranslateRouteImport.update({
   id: '/api/translate',
@@ -118,7 +118,6 @@ export interface FileRoutesByFullPath {
   '/chat': typeof ChatRoute
   '/chats': typeof ChatsRoute
   '/dashboard': typeof DashboardRoute
-  '/employee': typeof EmployeeRouteWithChildren
   '/login': typeof LoginRoute
   '/settings': typeof SettingsRoute
   '/welcome': typeof WelcomeRoute
@@ -131,13 +130,13 @@ export interface FileRoutesByFullPath {
   '/onboarding/mobile': typeof OnboardingMobileRoute
   '/onboarding/name': typeof OnboardingNameRoute
   '/topic/$key': typeof TopicKeyRoute
+  '/employee/': typeof EmployeeIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/chat': typeof ChatRoute
   '/chats': typeof ChatsRoute
   '/dashboard': typeof DashboardRoute
-  '/employee': typeof EmployeeRouteWithChildren
   '/login': typeof LoginRoute
   '/settings': typeof SettingsRoute
   '/welcome': typeof WelcomeRoute
@@ -150,6 +149,7 @@ export interface FileRoutesByTo {
   '/onboarding/mobile': typeof OnboardingMobileRoute
   '/onboarding/name': typeof OnboardingNameRoute
   '/topic/$key': typeof TopicKeyRoute
+  '/employee': typeof EmployeeIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -157,7 +157,6 @@ export interface FileRoutesById {
   '/chat': typeof ChatRoute
   '/chats': typeof ChatsRoute
   '/dashboard': typeof DashboardRoute
-  '/employee': typeof EmployeeRouteWithChildren
   '/login': typeof LoginRoute
   '/settings': typeof SettingsRoute
   '/welcome': typeof WelcomeRoute
@@ -170,6 +169,7 @@ export interface FileRoutesById {
   '/onboarding/mobile': typeof OnboardingMobileRoute
   '/onboarding/name': typeof OnboardingNameRoute
   '/topic/$key': typeof TopicKeyRoute
+  '/employee/': typeof EmployeeIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -178,7 +178,6 @@ export interface FileRouteTypes {
     | '/chat'
     | '/chats'
     | '/dashboard'
-    | '/employee'
     | '/login'
     | '/settings'
     | '/welcome'
@@ -191,13 +190,13 @@ export interface FileRouteTypes {
     | '/onboarding/mobile'
     | '/onboarding/name'
     | '/topic/$key'
+    | '/employee/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/chat'
     | '/chats'
     | '/dashboard'
-    | '/employee'
     | '/login'
     | '/settings'
     | '/welcome'
@@ -210,13 +209,13 @@ export interface FileRouteTypes {
     | '/onboarding/mobile'
     | '/onboarding/name'
     | '/topic/$key'
+    | '/employee'
   id:
     | '__root__'
     | '/'
     | '/chat'
     | '/chats'
     | '/dashboard'
-    | '/employee'
     | '/login'
     | '/settings'
     | '/welcome'
@@ -229,6 +228,7 @@ export interface FileRouteTypes {
     | '/onboarding/mobile'
     | '/onboarding/name'
     | '/topic/$key'
+    | '/employee/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -236,18 +236,19 @@ export interface RootRouteChildren {
   ChatRoute: typeof ChatRoute
   ChatsRoute: typeof ChatsRoute
   DashboardRoute: typeof DashboardRoute
-  EmployeeRoute: typeof EmployeeRouteWithChildren
   LoginRoute: typeof LoginRoute
   SettingsRoute: typeof SettingsRoute
   WelcomeRoute: typeof WelcomeRoute
   ApiChatRoute: typeof ApiChatRoute
   ApiTranslateRoute: typeof ApiTranslateRoute
+  EmployeeLoginRoute: typeof EmployeeLoginRoute
   OnboardingDobRoute: typeof OnboardingDobRoute
   OnboardingGenderRoute: typeof OnboardingGenderRoute
   OnboardingLanguageRoute: typeof OnboardingLanguageRoute
   OnboardingMobileRoute: typeof OnboardingMobileRoute
   OnboardingNameRoute: typeof OnboardingNameRoute
   TopicKeyRoute: typeof TopicKeyRoute
+  EmployeeIndexRoute: typeof EmployeeIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -271,13 +272,6 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/employee': {
-      id: '/employee'
-      path: '/employee'
-      fullPath: '/employee'
-      preLoaderRoute: typeof EmployeeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -306,6 +300,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/employee/': {
+      id: '/employee/'
+      path: '/employee'
+      fullPath: '/employee/'
+      preLoaderRoute: typeof EmployeeIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/topic/$key': {
@@ -352,10 +353,10 @@ declare module '@tanstack/react-router' {
     }
     '/employee/login': {
       id: '/employee/login'
-      path: '/login'
+      path: '/employee/login'
       fullPath: '/employee/login'
       preLoaderRoute: typeof EmployeeLoginRouteImport
-      parentRoute: typeof EmployeeRoute
+      parentRoute: typeof rootRouteImport
     }
     '/api/translate': {
       id: '/api/translate'
@@ -374,35 +375,24 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface EmployeeRouteChildren {
-  EmployeeLoginRoute: typeof EmployeeLoginRoute
-}
-
-const EmployeeRouteChildren: EmployeeRouteChildren = {
-  EmployeeLoginRoute: EmployeeLoginRoute,
-}
-
-const EmployeeRouteWithChildren = EmployeeRoute._addFileChildren(
-  EmployeeRouteChildren,
-)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ChatRoute: ChatRoute,
   ChatsRoute: ChatsRoute,
   DashboardRoute: DashboardRoute,
-  EmployeeRoute: EmployeeRouteWithChildren,
   LoginRoute: LoginRoute,
   SettingsRoute: SettingsRoute,
   WelcomeRoute: WelcomeRoute,
   ApiChatRoute: ApiChatRoute,
   ApiTranslateRoute: ApiTranslateRoute,
+  EmployeeLoginRoute: EmployeeLoginRoute,
   OnboardingDobRoute: OnboardingDobRoute,
   OnboardingGenderRoute: OnboardingGenderRoute,
   OnboardingLanguageRoute: OnboardingLanguageRoute,
   OnboardingMobileRoute: OnboardingMobileRoute,
   OnboardingNameRoute: OnboardingNameRoute,
   TopicKeyRoute: TopicKeyRoute,
+  EmployeeIndexRoute: EmployeeIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

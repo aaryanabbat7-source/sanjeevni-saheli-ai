@@ -35,7 +35,7 @@ function Landing() {
           <a href="#features" className="hover:text-foreground transition">Features</a>
           <a href="#topics" className="hover:text-foreground transition">Topics</a>
           <a href="#impact" className="hover:text-foreground transition">Impact</a>
-          <a href="#tgelf" className="hover:text-foreground transition">TGELF</a>
+          <a href="#mission" className="hover:text-foreground transition">Mission</a>
         </nav>
         <div className="flex items-center gap-2">
           {loggedIn ? (
@@ -73,7 +73,7 @@ function Landing() {
             transition={{ delay: 0.1 }}
             className="inline-flex items-center gap-2 rounded-full glass px-3 py-1.5 text-xs font-semibold text-primary"
           >
-            <Sparkles className="size-3.5" /> TGELF Youth Leader 2026 Initiative
+            <Sparkles className="size-3.5" /> A youth-led healthcare initiative for India
           </motion.div>
           <h1 className="mt-5 text-4xl md:text-6xl font-extrabold leading-[1.05] tracking-tight">
             Healthcare guidance for <span className="text-gradient">every Indian family</span>
@@ -245,12 +245,12 @@ function Landing() {
         </div>
       </section>
 
-      {/* TGELF */}
-      <section id="tgelf" className="mx-auto max-w-6xl px-5 py-12">
+      {/* Mission */}
+      <section id="mission" className="mx-auto max-w-6xl px-5 py-12">
         <div className="rounded-3xl glass p-8 md:p-10 flex flex-col md:flex-row gap-6 items-center">
           <div className="size-20 rounded-2xl bg-gradient-primary grid place-items-center text-3xl shadow-glow">🌍</div>
           <div className="flex-1 text-center md:text-left">
-            <div className="text-xs uppercase tracking-widest text-primary font-bold">TGELF Youth Leader 2026</div>
+            <div className="text-xs uppercase tracking-widest text-primary font-bold">Our Mission</div>
             <h3 className="mt-1 text-2xl font-bold">A youth-led initiative for a healthier India</h3>
             <p className="mt-2 text-muted-foreground text-sm max-w-2xl">
               Sanjeevni Saheli AI is built as a non-profit, open-access health companion. Our mission: empower every woman, mother and family with the right health information, in their own language.

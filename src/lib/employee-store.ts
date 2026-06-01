@@ -96,18 +96,23 @@ export async function employeeSignUp(name: string, email: string, password: stri
     return { error: "Invalid team passcode." };
   }
   const redirectUrl = typeof window !== "undefined" ? `${window.location.origin}/employee` : undefined;
-  const { data, error } = await supabase.auth.signUp({
+  const { error } = await supabase.auth.signUp({
     email, password,
     options: { emailRedirectTo: redirectUrl, data: { name, employee: true } },
   });
-  if (error) return { error: error.message };
-  // Insert employee + role rows (RLS: self-insert allowed)
-  if (data.user) {
-    // user_roles INSERT is blocked by RLS for anon; we need a server function.
-    const { claimEmployeeRole } = await import("@/lib/employee-claim.functions");
-    const res = await claimEmployeeRole({ data: { name, gatePassword } });
-    if (!res?.ok) return { error: res?.error ?? "Could not register as employee." };
+  if (error && !/already/i.test(error.message)) return { error: error.message };
+
+  // Ensure we have an active session (auto-confirm is on)
+  const { data: sess } = await supabase.auth.getSession();
+  if (!sess.session) {
+    const { error: signErr } = await supabase.auth.signInWithPassword({ email, password });
+    if (signErr) return { error: signErr.message };
   }
+
+  const { claimEmployeeRole } = await import("@/lib/employee-claim.functions");
+  const res = await claimEmployeeRole({ data: { name, gatePassword } });
+  if (!res?.ok) return { error: res?.error ?? "Could not register as employee." };
+
   await refreshEmployee();
   return {};
 }

@@ -9,38 +9,298 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WelcomeRouteImport } from './routes/welcome'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as EmployeeRouteImport } from './routes/employee'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as ChatsRouteImport } from './routes/chats'
+import { Route as ChatRouteImport } from './routes/chat'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TopicKeyRouteImport } from './routes/topic.$key'
+import { Route as OnboardingNameRouteImport } from './routes/onboarding.name'
+import { Route as OnboardingMobileRouteImport } from './routes/onboarding.mobile'
+import { Route as OnboardingLanguageRouteImport } from './routes/onboarding.language'
+import { Route as OnboardingGenderRouteImport } from './routes/onboarding.gender'
+import { Route as OnboardingDobRouteImport } from './routes/onboarding.dob'
+import { Route as EmployeeLoginRouteImport } from './routes/employee.login'
+import { Route as ApiTranslateRouteImport } from './routes/api/translate'
+import { Route as ApiChatRouteImport } from './routes/api/chat'
 
+const WelcomeRoute = WelcomeRouteImport.update({
+  id: '/welcome',
+  path: '/welcome',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmployeeRoute = EmployeeRouteImport.update({
+  id: '/employee',
+  path: '/employee',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChatsRoute = ChatsRouteImport.update({
+  id: '/chats',
+  path: '/chats',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChatRoute = ChatRouteImport.update({
+  id: '/chat',
+  path: '/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TopicKeyRoute = TopicKeyRouteImport.update({
+  id: '/topic/$key',
+  path: '/topic/$key',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingNameRoute = OnboardingNameRouteImport.update({
+  id: '/onboarding/name',
+  path: '/onboarding/name',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingMobileRoute = OnboardingMobileRouteImport.update({
+  id: '/onboarding/mobile',
+  path: '/onboarding/mobile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingLanguageRoute = OnboardingLanguageRouteImport.update({
+  id: '/onboarding/language',
+  path: '/onboarding/language',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingGenderRoute = OnboardingGenderRouteImport.update({
+  id: '/onboarding/gender',
+  path: '/onboarding/gender',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingDobRoute = OnboardingDobRouteImport.update({
+  id: '/onboarding/dob',
+  path: '/onboarding/dob',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmployeeLoginRoute = EmployeeLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => EmployeeRoute,
+} as any)
+const ApiTranslateRoute = ApiTranslateRouteImport.update({
+  id: '/api/translate',
+  path: '/api/translate',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiChatRoute = ApiChatRouteImport.update({
+  id: '/api/chat',
+  path: '/api/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/chat': typeof ChatRoute
+  '/chats': typeof ChatsRoute
+  '/dashboard': typeof DashboardRoute
+  '/employee': typeof EmployeeRouteWithChildren
+  '/login': typeof LoginRoute
+  '/settings': typeof SettingsRoute
+  '/welcome': typeof WelcomeRoute
+  '/api/chat': typeof ApiChatRoute
+  '/api/translate': typeof ApiTranslateRoute
+  '/employee/login': typeof EmployeeLoginRoute
+  '/onboarding/dob': typeof OnboardingDobRoute
+  '/onboarding/gender': typeof OnboardingGenderRoute
+  '/onboarding/language': typeof OnboardingLanguageRoute
+  '/onboarding/mobile': typeof OnboardingMobileRoute
+  '/onboarding/name': typeof OnboardingNameRoute
+  '/topic/$key': typeof TopicKeyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/chat': typeof ChatRoute
+  '/chats': typeof ChatsRoute
+  '/dashboard': typeof DashboardRoute
+  '/employee': typeof EmployeeRouteWithChildren
+  '/login': typeof LoginRoute
+  '/settings': typeof SettingsRoute
+  '/welcome': typeof WelcomeRoute
+  '/api/chat': typeof ApiChatRoute
+  '/api/translate': typeof ApiTranslateRoute
+  '/employee/login': typeof EmployeeLoginRoute
+  '/onboarding/dob': typeof OnboardingDobRoute
+  '/onboarding/gender': typeof OnboardingGenderRoute
+  '/onboarding/language': typeof OnboardingLanguageRoute
+  '/onboarding/mobile': typeof OnboardingMobileRoute
+  '/onboarding/name': typeof OnboardingNameRoute
+  '/topic/$key': typeof TopicKeyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/chat': typeof ChatRoute
+  '/chats': typeof ChatsRoute
+  '/dashboard': typeof DashboardRoute
+  '/employee': typeof EmployeeRouteWithChildren
+  '/login': typeof LoginRoute
+  '/settings': typeof SettingsRoute
+  '/welcome': typeof WelcomeRoute
+  '/api/chat': typeof ApiChatRoute
+  '/api/translate': typeof ApiTranslateRoute
+  '/employee/login': typeof EmployeeLoginRoute
+  '/onboarding/dob': typeof OnboardingDobRoute
+  '/onboarding/gender': typeof OnboardingGenderRoute
+  '/onboarding/language': typeof OnboardingLanguageRoute
+  '/onboarding/mobile': typeof OnboardingMobileRoute
+  '/onboarding/name': typeof OnboardingNameRoute
+  '/topic/$key': typeof TopicKeyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/chat'
+    | '/chats'
+    | '/dashboard'
+    | '/employee'
+    | '/login'
+    | '/settings'
+    | '/welcome'
+    | '/api/chat'
+    | '/api/translate'
+    | '/employee/login'
+    | '/onboarding/dob'
+    | '/onboarding/gender'
+    | '/onboarding/language'
+    | '/onboarding/mobile'
+    | '/onboarding/name'
+    | '/topic/$key'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/chat'
+    | '/chats'
+    | '/dashboard'
+    | '/employee'
+    | '/login'
+    | '/settings'
+    | '/welcome'
+    | '/api/chat'
+    | '/api/translate'
+    | '/employee/login'
+    | '/onboarding/dob'
+    | '/onboarding/gender'
+    | '/onboarding/language'
+    | '/onboarding/mobile'
+    | '/onboarding/name'
+    | '/topic/$key'
+  id:
+    | '__root__'
+    | '/'
+    | '/chat'
+    | '/chats'
+    | '/dashboard'
+    | '/employee'
+    | '/login'
+    | '/settings'
+    | '/welcome'
+    | '/api/chat'
+    | '/api/translate'
+    | '/employee/login'
+    | '/onboarding/dob'
+    | '/onboarding/gender'
+    | '/onboarding/language'
+    | '/onboarding/mobile'
+    | '/onboarding/name'
+    | '/topic/$key'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ChatRoute: typeof ChatRoute
+  ChatsRoute: typeof ChatsRoute
+  DashboardRoute: typeof DashboardRoute
+  EmployeeRoute: typeof EmployeeRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  SettingsRoute: typeof SettingsRoute
+  WelcomeRoute: typeof WelcomeRoute
+  ApiChatRoute: typeof ApiChatRoute
+  ApiTranslateRoute: typeof ApiTranslateRoute
+  OnboardingDobRoute: typeof OnboardingDobRoute
+  OnboardingGenderRoute: typeof OnboardingGenderRoute
+  OnboardingLanguageRoute: typeof OnboardingLanguageRoute
+  OnboardingMobileRoute: typeof OnboardingMobileRoute
+  OnboardingNameRoute: typeof OnboardingNameRoute
+  TopicKeyRoute: typeof TopicKeyRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/welcome': {
+      id: '/welcome'
+      path: '/welcome'
+      fullPath: '/welcome'
+      preLoaderRoute: typeof WelcomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/employee': {
+      id: '/employee'
+      path: '/employee'
+      fullPath: '/employee'
+      preLoaderRoute: typeof EmployeeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/chats': {
+      id: '/chats'
+      path: '/chats'
+      fullPath: '/chats'
+      preLoaderRoute: typeof ChatsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/chat': {
+      id: '/chat'
+      path: '/chat'
+      fullPath: '/chat'
+      preLoaderRoute: typeof ChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +308,101 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/topic/$key': {
+      id: '/topic/$key'
+      path: '/topic/$key'
+      fullPath: '/topic/$key'
+      preLoaderRoute: typeof TopicKeyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding/name': {
+      id: '/onboarding/name'
+      path: '/onboarding/name'
+      fullPath: '/onboarding/name'
+      preLoaderRoute: typeof OnboardingNameRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding/mobile': {
+      id: '/onboarding/mobile'
+      path: '/onboarding/mobile'
+      fullPath: '/onboarding/mobile'
+      preLoaderRoute: typeof OnboardingMobileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding/language': {
+      id: '/onboarding/language'
+      path: '/onboarding/language'
+      fullPath: '/onboarding/language'
+      preLoaderRoute: typeof OnboardingLanguageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding/gender': {
+      id: '/onboarding/gender'
+      path: '/onboarding/gender'
+      fullPath: '/onboarding/gender'
+      preLoaderRoute: typeof OnboardingGenderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding/dob': {
+      id: '/onboarding/dob'
+      path: '/onboarding/dob'
+      fullPath: '/onboarding/dob'
+      preLoaderRoute: typeof OnboardingDobRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/employee/login': {
+      id: '/employee/login'
+      path: '/login'
+      fullPath: '/employee/login'
+      preLoaderRoute: typeof EmployeeLoginRouteImport
+      parentRoute: typeof EmployeeRoute
+    }
+    '/api/translate': {
+      id: '/api/translate'
+      path: '/api/translate'
+      fullPath: '/api/translate'
+      preLoaderRoute: typeof ApiTranslateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/chat': {
+      id: '/api/chat'
+      path: '/api/chat'
+      fullPath: '/api/chat'
+      preLoaderRoute: typeof ApiChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
+interface EmployeeRouteChildren {
+  EmployeeLoginRoute: typeof EmployeeLoginRoute
+}
+
+const EmployeeRouteChildren: EmployeeRouteChildren = {
+  EmployeeLoginRoute: EmployeeLoginRoute,
+}
+
+const EmployeeRouteWithChildren = EmployeeRoute._addFileChildren(
+  EmployeeRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ChatRoute: ChatRoute,
+  ChatsRoute: ChatsRoute,
+  DashboardRoute: DashboardRoute,
+  EmployeeRoute: EmployeeRouteWithChildren,
+  LoginRoute: LoginRoute,
+  SettingsRoute: SettingsRoute,
+  WelcomeRoute: WelcomeRoute,
+  ApiChatRoute: ApiChatRoute,
+  ApiTranslateRoute: ApiTranslateRoute,
+  OnboardingDobRoute: OnboardingDobRoute,
+  OnboardingGenderRoute: OnboardingGenderRoute,
+  OnboardingLanguageRoute: OnboardingLanguageRoute,
+  OnboardingMobileRoute: OnboardingMobileRoute,
+  OnboardingNameRoute: OnboardingNameRoute,
+  TopicKeyRoute: TopicKeyRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

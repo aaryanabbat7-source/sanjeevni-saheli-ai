@@ -130,12 +130,20 @@ export async function signUpWithPassword(mobile: string, password: string): Prom
     email, password,
     options: { emailRedirectTo: redirectUrl, data: { mobile } },
   });
-  if (error) {
-    if (error.message?.toLowerCase().includes("already")) {
-      return { error: "This mobile number is already registered. Please log in." };
-    }
+  if (error && !/already/i.test(error.message ?? "")) {
     return { error: error.message };
   }
+  // Ensure active session (auto-confirm is enabled)
+  const { data: sess } = await supabase.auth.getSession();
+  if (!sess.session) {
+    const { error: signErr } = await supabase.auth.signInWithPassword({ email, password });
+    if (signErr) {
+      return { error: error?.message?.toLowerCase().includes("already")
+        ? "This mobile number is already registered. Please log in."
+        : signErr.message };
+    }
+  }
+  await fetchProfiles();
   return {};
 }
 

@@ -7,7 +7,7 @@ import { ArrowLeft, Mic, Send, Volume2, Phone, AlertTriangle, Square, Copy, Chec
 import { PageShell } from "@/components/PageShell";
 import { Logo } from "@/components/Logo";
 import { t, bcp47 } from "@/lib/i18n";
-import { useHasMounted, useUser, ageFromDob } from "@/lib/user-store";
+import { useUser, useAuthReady, ageFromDob } from "@/lib/user-store";
 import { detectEmergency } from "@/lib/topics";
 import { createThread, getThread, saveThread, useChatThreads } from "@/lib/chat-store";
 import { z } from "zod";
@@ -23,7 +23,7 @@ export const Route = createFileRoute("/chat")({
 });
 
 function ChatPage() {
-  const mounted = useHasMounted();
+  const ready = useAuthReady();
   const user = useUser();
   const nav = useNavigate();
   const { q, threadId } = Route.useSearch();
@@ -31,8 +31,8 @@ function ChatPage() {
   useChatThreads();
 
   useEffect(() => {
-    if (mounted && !user) nav({ to: "/" });
-  }, [mounted, user, nav]);
+    if (ready && !user) nav({ to: "/" });
+  }, [ready, user, nav]);
 
   // Resolve / create active thread
   const activeThreadId = useMemo(() => {

@@ -6,7 +6,7 @@ import { PageShell, Disclaimer } from "@/components/PageShell";
 import { EmergencyBar } from "@/components/EmergencyBar";
 import { Logo } from "@/components/Logo";
 import { t } from "@/lib/i18n";
-import { useHasMounted, useUser } from "@/lib/user-store";
+import { useUser, useAuthReady } from "@/lib/user-store";
 import { TOPICS } from "@/lib/topics";
 
 export const Route = createFileRoute("/dashboard")({
@@ -14,13 +14,13 @@ export const Route = createFileRoute("/dashboard")({
 });
 
 function Dashboard() {
-  const mounted = useHasMounted();
+  const ready = useAuthReady();
   const user = useUser();
   const nav = useNavigate();
 
   useEffect(() => {
-    if (mounted && !user) nav({ to: "/" });
-  }, [mounted, user, nav]);
+    if (ready && !user) nav({ to: "/" });
+  }, [ready, user, nav]);
 
   if (!user) return null;
   const dict = t[user.lang];

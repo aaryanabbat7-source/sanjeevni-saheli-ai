@@ -5,7 +5,7 @@ import { PageShell } from "@/components/PageShell";
 import { Logo } from "@/components/Logo";
 import { LANGUAGES, t, type Lang } from "@/lib/i18n";
 import {
-  useUser, useStore, useHasMounted, setActive, logout, removeProfile,
+  useUser, useStore, useAuthReady, setActive, logout, removeProfile,
   updateActiveLang, clearDraft, setDraft, profilesByMobile, MAX_PER_MOBILE,
 } from "@/lib/user-store";
 
@@ -14,15 +14,15 @@ export const Route = createFileRoute("/settings")({
 });
 
 function SettingsPage() {
-  const mounted = useHasMounted();
+  const ready = useAuthReady();
   const user = useUser();
   const store = useStore();
   const nav = useNavigate();
   const [showLangs, setShowLangs] = useState(false);
 
   useEffect(() => {
-    if (mounted && !user) nav({ to: "/" });
-  }, [mounted, user, nav]);
+    if (ready && !user) nav({ to: "/" });
+  }, [ready, user, nav]);
 
   if (!user) return null;
   const dict = t[user.lang];

@@ -255,6 +255,14 @@ export function useHasMounted() {
   return m;
 }
 
+// True only once we know whether the user is logged in or not
+// (avoids flicker-redirects to landing on page refresh).
+export function useAuthReady(): boolean {
+  const mounted = useHasMounted();
+  const s = useStore();
+  return mounted && s.hydrated && !s.loading;
+}
+
 export function ageFromDob(dob: string | null): number | null {
   if (!dob) return null;
   const d = new Date(dob);

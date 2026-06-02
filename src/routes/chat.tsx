@@ -61,7 +61,7 @@ function ChatPage() {
   const langCode = bcp47(lang);
   const age = ageFromDob(user?.dob ?? null);
 
-  const { messages, sendMessage, status, stop } = useChat({
+  const { messages, sendMessage, status, stop, setMessages } = useChat({
     id: activeThreadId ?? "pending",
     messages: initialMessages,
     transport: new DefaultChatTransport({
@@ -69,6 +69,15 @@ function ChatPage() {
       body: { lang, profile: { name: user?.name, age: age ?? undefined, gender: user?.gender ?? undefined } },
     }),
   });
+
+  // Sync incoming realtime messages from team/employees into local chat state
+  const threadStoreMsgs = activeThreadId ? getThread(activeThreadId)?.messages : undefined;
+  useEffect(() => {
+    if (!threadStoreMsgs) return;
+    const known = new Set(messages.map((m) => m.id));
+    const extra = threadStoreMsgs.filter((m) => !known.has(m.id));
+    if (extra.length > 0) setMessages([...messages, ...extra]);
+  }, [threadStoreMsgs, messages, setMessages]);
 
   const [input, setInput] = useState("");
   const [emergency, setEmergency] = useState(false);

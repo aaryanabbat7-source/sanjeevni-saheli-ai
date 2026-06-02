@@ -175,10 +175,21 @@ export async function removeProfile(id: string) {
 
 export async function updateActiveLang(lang: Lang) {
   if (!state.activeId) return;
-  await supabase.from("profiles").update({ lang }).eq("id", state.activeId);
+  // optimistic
   set({
     profiles: state.profiles.map((p) => (p.id === state.activeId ? { ...p, lang } : p)),
   });
+  const { error } = await supabase
+    .from("profiles")
+    .update({ lang })
+    .eq("id", state.activeId)
+    .select("id")
+    .single();
+  if (error) {
+    console.error("updateActiveLang", error.message);
+    // rollback by refetching
+    await fetchProfiles();
+  }
 }
 
 // commitDraft: requires authed session; insert profile row
@@ -242,6 +253,14 @@ export function useHasMounted() {
   const [m, setM] = useState(false);
   useEffect(() => setM(true), []);
   return m;
+}
+
+// True only once we know whether the user is logged in or not
+// (avoids flicker-redirects to landing on page refresh).
+export function useAuthReady(): boolean {
+  const mounted = useHasMounted();
+  const s = useStore();
+  return mounted && s.hydrated && !s.loading;
 }
 
 export function ageFromDob(dob: string | null): number | null {

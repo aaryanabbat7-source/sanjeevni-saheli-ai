@@ -7,7 +7,7 @@ import { ArrowLeft, Mic, Send, Volume2, Phone, AlertTriangle, Square, Copy, Chec
 import { PageShell } from "@/components/PageShell";
 import { Logo } from "@/components/Logo";
 import { t, bcp47 } from "@/lib/i18n";
-import { useHasMounted, useUser, ageFromDob } from "@/lib/user-store";
+import { useUser, useAuthReady, ageFromDob } from "@/lib/user-store";
 import { detectEmergency } from "@/lib/topics";
 import { createThread, getThread, saveThread, useChatThreads } from "@/lib/chat-store";
 import { z } from "zod";
@@ -23,7 +23,7 @@ export const Route = createFileRoute("/chat")({
 });
 
 function ChatPage() {
-  const mounted = useHasMounted();
+  const ready = useAuthReady();
   const user = useUser();
   const nav = useNavigate();
   const { q, threadId } = Route.useSearch();
@@ -31,19 +31,19 @@ function ChatPage() {
   useChatThreads();
 
   useEffect(() => {
-    if (mounted && !user) nav({ to: "/" });
-  }, [mounted, user, nav]);
+    if (ready && !user) nav({ to: "/" });
+  }, [ready, user, nav]);
 
   // Resolve / create active thread
   const activeThreadId = useMemo(() => {
-    if (!mounted || !user) return null;
+    if (!ready || !user) return null;
     if (threadId) {
       const existing = getThread(threadId);
       if (existing && existing.userId === user.id) return threadId;
     }
     const created = createThread(user.id);
     return created.id;
-  }, [mounted, user, threadId]);
+  }, [ready, user, threadId]);
 
   useEffect(() => {
     if (activeThreadId && activeThreadId !== threadId) {
@@ -61,7 +61,7 @@ function ChatPage() {
   const langCode = bcp47(lang);
   const age = ageFromDob(user?.dob ?? null);
 
-  const { messages, sendMessage, status, stop } = useChat({
+  const { messages, sendMessage, status, stop, setMessages } = useChat({
     id: activeThreadId ?? "pending",
     messages: initialMessages,
     transport: new DefaultChatTransport({
@@ -69,6 +69,15 @@ function ChatPage() {
       body: { lang, profile: { name: user?.name, age: age ?? undefined, gender: user?.gender ?? undefined } },
     }),
   });
+
+  // Sync incoming realtime messages from team/employees into local chat state
+  const threadStoreMsgs = activeThreadId ? getThread(activeThreadId)?.messages : undefined;
+  useEffect(() => {
+    if (!threadStoreMsgs) return;
+    const known = new Set(messages.map((m) => m.id));
+    const extra = threadStoreMsgs.filter((m) => !known.has(m.id));
+    if (extra.length > 0) setMessages([...messages, ...extra]);
+  }, [threadStoreMsgs, messages, setMessages]);
 
   const [input, setInput] = useState("");
   const [emergency, setEmergency] = useState(false);
@@ -80,11 +89,11 @@ function ChatPage() {
   const sentInitial = useRef(false);
 
   useEffect(() => {
-    if (q && !sentInitial.current && mounted && user && activeThreadId) {
+    if (q && !sentInitial.current && ready && user && activeThreadId) {
       sentInitial.current = true;
       void sendMessage({ text: q });
     }
-  }, [q, mounted, user, activeThreadId, sendMessage]);
+  }, [q, ready, user, activeThreadId, sendMessage]);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
@@ -247,6 +256,11 @@ function ChatPage() {
                     ? "bg-gradient-primary text-primary-foreground rounded-tr-md shadow-soft"
                     : "bg-card border border-border text-foreground rounded-tl-md shadow-card"
                 }`}>
+                  {!isUser && threadMeta?.fromEmployee && (
+                    <div className="mb-1 inline-flex items-center gap-1 rounded-full bg-primary/10 text-primary px-2 py-0.5 text-[10px] font-semibold">
+                      👩‍⚕️ {threadMeta.fromEmployeeName ?? "Team"}
+                    </div>
+                  )}
                   {text}
                   {!isUser && threadMeta?.translated && (
                     <div className="mt-1.5 inline-flex items-center gap-1 text-[10px] text-muted-foreground italic">

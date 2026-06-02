@@ -93,9 +93,41 @@ export async function fetchAllThreads() {
   (ms ?? []).forEach((m) => { (byThread[m.thread_id] ??= []).push(m as MessageRow); });
   threads = ts.map((t) => rowsToThread(t as ThreadRow, byThread[t.id] ?? []));
   emit();
+  subscribeRealtime();
 }
 
-export function clearChats() { threads = []; emit(); }
+let realtimeSub: { unsubscribe: () => void } | null = null;
+function subscribeRealtime() {
+  if (realtimeSub) return;
+  const channel = supabase
+    .channel("chat-msgs")
+    .on("postgres_changes", { event: "INSERT", schema: "public", table: "chat_messages" }, (payload) => {
+      const m = payload.new as MessageRow;
+      const t = threads.find((x) => x.id === m.thread_id);
+      if (!t) return;
+      const id = m.client_id ?? m.id;
+      if (t.messages.some((x) => x.id === id)) return; // dedupe own inserts
+      const msg = { id, role: m.role as "user" | "assistant", parts: [{ type: "text", text: m.text }] } as UIMessage;
+      const meta: MessageMeta | undefined = (m.translated || m.from_employee_id || m.original_text)
+        ? {
+            translated: m.translated,
+            originalText: m.original_text ?? undefined,
+            translatedLang: m.translated_lang ?? undefined,
+            fromEmployee: !!m.from_employee_id,
+            fromEmployeeName: m.from_employee_name ?? undefined,
+          }
+        : undefined;
+      patchThread(t.id, {
+        messages: [...t.messages, msg],
+        meta: { ...(t.meta ?? {}), ...(meta ? { [id]: meta } : {}) },
+        updatedAt: new Date(m.created_at).getTime(),
+      });
+    })
+    .subscribe();
+  realtimeSub = { unsubscribe: () => { void supabase.removeChannel(channel); realtimeSub = null; } };
+}
+
+export function clearChats() { threads = []; emit(); realtimeSub?.unsubscribe(); }
 
 // ---------- Selectors ----------
 export function listThreads(profileId: string): ChatThread[] {

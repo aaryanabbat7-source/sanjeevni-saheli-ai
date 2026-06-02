@@ -4,7 +4,7 @@ import { ArrowLeft, MessageCircle, Plus, Trash2 } from "lucide-react";
 import { PageShell } from "@/components/PageShell";
 import { Logo } from "@/components/Logo";
 import { t } from "@/lib/i18n";
-import { useHasMounted, useUser } from "@/lib/user-store";
+import { useAuthReady, useUser } from "@/lib/user-store";
 import { listThreads, deleteThread, useChatThreads } from "@/lib/chat-store";
 
 export const Route = createFileRoute("/chats")({
@@ -12,14 +12,14 @@ export const Route = createFileRoute("/chats")({
 });
 
 function ChatsPage() {
-  const mounted = useHasMounted();
+  const ready = useAuthReady();
   const user = useUser();
   const nav = useNavigate();
   useChatThreads();
 
   useEffect(() => {
-    if (mounted && !user) nav({ to: "/" });
-  }, [mounted, user, nav]);
+    if (ready && !user) nav({ to: "/" });
+  }, [ready, user, nav]);
 
   if (!user) return null;
   const dict = t[user.lang];

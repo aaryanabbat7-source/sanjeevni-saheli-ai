@@ -126,19 +126,6 @@ function subscribeRealtime() {
     .subscribe();
   realtimeSub = { unsubscribe: () => { void supabase.removeChannel(channel); realtimeSub = null; } };
 }
-  if (error || !ts) return;
-  if (ts.length === 0) { threads = []; emit(); return; }
-  const ids = ts.map((t) => t.id);
-  const { data: ms } = await supabase
-    .from("chat_messages")
-    .select("*")
-    .in("thread_id", ids)
-    .order("created_at", { ascending: true });
-  const byThread: Record<string, MessageRow[]> = {};
-  (ms ?? []).forEach((m) => { (byThread[m.thread_id] ??= []).push(m as MessageRow); });
-  threads = ts.map((t) => rowsToThread(t as ThreadRow, byThread[t.id] ?? []));
-  emit();
-}
 
 export function clearChats() { threads = []; emit(); }
 

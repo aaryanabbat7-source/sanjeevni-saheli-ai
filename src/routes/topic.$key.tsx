@@ -1,10 +1,10 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowLeft, ChevronDown, MessageCircle, Search } from "lucide-react";
 import { PageShell, Disclaimer } from "@/components/PageShell";
 import { t, type TopicKey } from "@/lib/i18n";
-import { useUser } from "@/lib/user-store";
+import { useUser, useAuthReady } from "@/lib/user-store";
 import { TOPICS } from "@/lib/topics";
 
 export const Route = createFileRoute("/topic/$key")({
@@ -13,6 +13,7 @@ export const Route = createFileRoute("/topic/$key")({
 
 function TopicPage() {
   const { key } = Route.useParams();
+  const ready = useAuthReady();
   const user = useUser();
   const nav = useNavigate();
   const [open, setOpen] = useState<number | null>(0);
@@ -20,8 +21,13 @@ function TopicPage() {
 
   const topicKey = key as TopicKey;
   const topic = TOPICS.find((tp) => tp.key === topicKey);
-  if (!topic) { nav({ to: "/dashboard" }); return null; }
-  if (!user) { nav({ to: "/" }); return null; }
+
+  useEffect(() => {
+    if (!topic) nav({ to: "/dashboard" });
+    else if (ready && !user) nav({ to: "/" });
+  }, [topic, ready, user, nav]);
+
+  if (!topic || !user) return null;
 
   const dict = t[user.lang];
   const ti = dict.topics[topicKey];

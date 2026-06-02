@@ -247,6 +247,11 @@ function ChatPage() {
                     ? "bg-gradient-primary text-primary-foreground rounded-tr-md shadow-soft"
                     : "bg-card border border-border text-foreground rounded-tl-md shadow-card"
                 }`}>
+                  {!isUser && threadMeta?.fromEmployee && (
+                    <div className="mb-1 inline-flex items-center gap-1 rounded-full bg-primary/10 text-primary px-2 py-0.5 text-[10px] font-semibold">
+                      👩‍⚕️ {threadMeta.fromEmployeeName ?? "Team"}
+                    </div>
+                  )}
                   {text}
                   {!isUser && threadMeta?.translated && (
                     <div className="mt-1.5 inline-flex items-center gap-1 text-[10px] text-muted-foreground italic">

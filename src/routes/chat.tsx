@@ -36,14 +36,14 @@ function ChatPage() {
 
   // Resolve / create active thread
   const activeThreadId = useMemo(() => {
-    if (!mounted || !user) return null;
+    if (!ready || !user) return null;
     if (threadId) {
       const existing = getThread(threadId);
       if (existing && existing.userId === user.id) return threadId;
     }
     const created = createThread(user.id);
     return created.id;
-  }, [mounted, user, threadId]);
+  }, [ready, user, threadId]);
 
   useEffect(() => {
     if (activeThreadId && activeThreadId !== threadId) {
@@ -80,11 +80,11 @@ function ChatPage() {
   const sentInitial = useRef(false);
 
   useEffect(() => {
-    if (q && !sentInitial.current && mounted && user && activeThreadId) {
+    if (q && !sentInitial.current && ready && user && activeThreadId) {
       sentInitial.current = true;
       void sendMessage({ text: q });
     }
-  }, [q, mounted, user, activeThreadId, sendMessage]);
+  }, [q, ready, user, activeThreadId, sendMessage]);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });

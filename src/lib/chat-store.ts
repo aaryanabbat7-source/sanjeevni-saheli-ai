@@ -127,7 +127,7 @@ function subscribeRealtime() {
   realtimeSub = { unsubscribe: () => { void supabase.removeChannel(channel); realtimeSub = null; } };
 }
 
-export function clearChats() { threads = []; emit(); }
+export function clearChats() { threads = []; emit(); realtimeSub?.unsubscribe(); }
 
 // ---------- Selectors ----------
 export function listThreads(profileId: string): ChatThread[] {

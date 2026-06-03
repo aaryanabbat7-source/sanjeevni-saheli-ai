@@ -5,7 +5,7 @@ import { PageShell } from "@/components/PageShell";
 import { Logo } from "@/components/Logo";
 import { LANGUAGES, t, type Lang } from "@/lib/i18n";
 import {
-  useUser, useStore, useAuthReady, setActive, logout, removeProfile,
+  useUser, useStore, useAuthReady, useHasSession, setActive, logout, removeProfile,
   updateActiveLang, clearDraft, setDraft, profilesByMobile, MAX_PER_MOBILE,
 } from "@/lib/user-store";
 

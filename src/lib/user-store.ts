@@ -266,6 +266,12 @@ export function useAuthReady(): boolean {
   return mounted && s.hydrated && !s.loading;
 }
 
+// True while we know a session exists but profile data may still be loading.
+// Use this to AVOID redirecting authenticated users to landing on refresh.
+export function useHasSession(): boolean {
+  return useStore().hasSession;
+}
+
 export function ageFromDob(dob: string | null): number | null {
   if (!dob) return null;
   const d = new Date(dob);

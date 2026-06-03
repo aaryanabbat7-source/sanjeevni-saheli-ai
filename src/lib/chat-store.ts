@@ -100,13 +100,13 @@ let realtimeSub: { unsubscribe: () => void } | null = null;
 function subscribeRealtime() {
   if (realtimeSub) return;
   const channel = supabase
-    .channel("chat-msgs")
+    .channel("sanjeevni-live")
     .on("postgres_changes", { event: "INSERT", schema: "public", table: "chat_messages" }, (payload) => {
       const m = payload.new as MessageRow;
       const t = threads.find((x) => x.id === m.thread_id);
-      if (!t) return;
+      if (!t) { void fetchAllThreads(); return; }
       const id = m.client_id ?? m.id;
-      if (t.messages.some((x) => x.id === id)) return; // dedupe own inserts
+      if (t.messages.some((x) => x.id === id)) return;
       const msg = { id, role: m.role as "user" | "assistant", parts: [{ type: "text", text: m.text }] } as UIMessage;
       const meta: MessageMeta | undefined = (m.translated || m.from_employee_id || m.original_text)
         ? {
@@ -122,6 +122,23 @@ function subscribeRealtime() {
         meta: { ...(t.meta ?? {}), ...(meta ? { [id]: meta } : {}) },
         updatedAt: new Date(m.created_at).getTime(),
       });
+    })
+    .on("postgres_changes", { event: "INSERT", schema: "public", table: "chat_threads" }, (payload) => {
+      const r = payload.new as ThreadRow;
+      if (threads.some((t) => t.id === r.id)) return;
+      const t: ChatThread = {
+        id: r.id, userId: r.profile_id, ownerAuthId: r.user_id, title: r.title,
+        messages: [], meta: {},
+        createdAt: new Date(r.created_at).getTime(),
+        updatedAt: new Date(r.updated_at).getTime(),
+      };
+      pushThread(t);
+    })
+    .on("postgres_changes", { event: "UPDATE", schema: "public", table: "chat_threads" }, (payload) => {
+      const r = payload.new as ThreadRow;
+      const t = threads.find((x) => x.id === r.id);
+      if (!t) return;
+      patchThread(r.id, { title: r.title, updatedAt: new Date(r.updated_at).getTime() });
     })
     .subscribe();
   realtimeSub = { unsubscribe: () => { void supabase.removeChannel(channel); realtimeSub = null; } };

@@ -29,7 +29,7 @@ export const MAX_PER_MOBILE = 3;
 const DRAFT_KEY = "sanjeevni.draft.v1";
 const ACTIVE_KEY = "sanjeevni.active.v1";
 
-const empty: Store = { profiles: [], activeId: null, draft: {}, hydrated: false, loading: false };
+const empty: Store = { profiles: [], activeId: null, draft: {}, hydrated: false, loading: false, hasSession: false };
 let state: Store = empty;
 const listeners = new Set<() => void>();
 function emit() { listeners.forEach((l) => l()); }
@@ -93,7 +93,7 @@ export async function fetchProfiles() {
 
 export function clearProfiles() {
   saveActive(null);
-  set({ profiles: [], activeId: null, hydrated: true, loading: false });
+  set({ profiles: [], activeId: null, hydrated: true, loading: false, hasSession: false });
 }
 
 // Init: load local draft/activeId, then if a session exists, fetch profiles
@@ -103,11 +103,11 @@ export function initUserStore() {
   inited = true;
   loadLocal();
   supabase.auth.getSession().then(({ data }) => {
-    if (data.session) void fetchProfiles();
-    else set({ hydrated: true });
+    if (data.session) { set({ hasSession: true }); void fetchProfiles(); }
+    else set({ hydrated: true, hasSession: false });
   });
   supabase.auth.onAuthStateChange((_event, session) => {
-    if (session) void fetchProfiles();
+    if (session) { set({ hasSession: true }); void fetchProfiles(); }
     else clearProfiles();
   });
 }

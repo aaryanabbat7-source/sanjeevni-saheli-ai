@@ -4,7 +4,7 @@ import { ArrowLeft, MessageCircle, Plus, Trash2 } from "lucide-react";
 import { PageShell } from "@/components/PageShell";
 import { Logo } from "@/components/Logo";
 import { t } from "@/lib/i18n";
-import { useAuthReady, useUser } from "@/lib/user-store";
+import { useAuthReady, useUser, useHasSession } from "@/lib/user-store";
 import { listThreads, deleteThread, useChatThreads } from "@/lib/chat-store";
 
 export const Route = createFileRoute("/chats")({
@@ -13,12 +13,13 @@ export const Route = createFileRoute("/chats")({
 
 function ChatsPage() {
   const ready = useAuthReady();
+  const hasSession = useHasSession();
   const user = useUser();
   const nav = useNavigate();
   useChatThreads();
 
   useEffect(() => {
-    if (ready && !user) nav({ to: "/" });
+    if (ready && !user && !hasSession) nav({ to: "/" });
   }, [ready, user, nav]);
 
   if (!user) return null;

@@ -5,7 +5,7 @@ import { PageShell } from "@/components/PageShell";
 import { Logo } from "@/components/Logo";
 import { LANGUAGES, t, type Lang } from "@/lib/i18n";
 import {
-  useUser, useStore, useAuthReady, setActive, logout, removeProfile,
+  useUser, useStore, useAuthReady, useHasSession, setActive, logout, removeProfile,
   updateActiveLang, clearDraft, setDraft, profilesByMobile, MAX_PER_MOBILE,
 } from "@/lib/user-store";
 
@@ -15,13 +15,14 @@ export const Route = createFileRoute("/settings")({
 
 function SettingsPage() {
   const ready = useAuthReady();
+  const hasSession = useHasSession();
   const user = useUser();
   const store = useStore();
   const nav = useNavigate();
   const [showLangs, setShowLangs] = useState(false);
 
   useEffect(() => {
-    if (ready && !user) nav({ to: "/" });
+    if (ready && !user && !hasSession) nav({ to: "/" });
   }, [ready, user, nav]);
 
   if (!user) return null;

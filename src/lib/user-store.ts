@@ -22,13 +22,14 @@ interface Store {
   draft: Draft;
   hydrated: boolean;
   loading: boolean;
+  hasSession: boolean;
 }
 
 export const MAX_PER_MOBILE = 3;
 const DRAFT_KEY = "sanjeevni.draft.v1";
 const ACTIVE_KEY = "sanjeevni.active.v1";
 
-const empty: Store = { profiles: [], activeId: null, draft: {}, hydrated: false, loading: false };
+const empty: Store = { profiles: [], activeId: null, draft: {}, hydrated: false, loading: false, hasSession: false };
 let state: Store = empty;
 const listeners = new Set<() => void>();
 function emit() { listeners.forEach((l) => l()); }
@@ -92,7 +93,7 @@ export async function fetchProfiles() {
 
 export function clearProfiles() {
   saveActive(null);
-  set({ profiles: [], activeId: null, hydrated: true, loading: false });
+  set({ profiles: [], activeId: null, hydrated: true, loading: false, hasSession: false });
 }
 
 // Init: load local draft/activeId, then if a session exists, fetch profiles
@@ -102,11 +103,11 @@ export function initUserStore() {
   inited = true;
   loadLocal();
   supabase.auth.getSession().then(({ data }) => {
-    if (data.session) void fetchProfiles();
-    else set({ hydrated: true });
+    if (data.session) { set({ hasSession: true }); void fetchProfiles(); }
+    else set({ hydrated: true, hasSession: false });
   });
   supabase.auth.onAuthStateChange((_event, session) => {
-    if (session) void fetchProfiles();
+    if (session) { set({ hasSession: true }); void fetchProfiles(); }
     else clearProfiles();
   });
 }
@@ -174,20 +175,22 @@ export async function removeProfile(id: string) {
 }
 
 export async function updateActiveLang(lang: Lang) {
-  if (!state.activeId) return;
+  const activeId = state.activeId;
+  if (!activeId) return;
   // optimistic
   set({
-    profiles: state.profiles.map((p) => (p.id === state.activeId ? { ...p, lang } : p)),
+    profiles: state.profiles.map((p) => (p.id === activeId ? { ...p, lang } : p)),
   });
-  const { error } = await supabase
+  const { data: sess } = await supabase.auth.getUser();
+  if (!sess.user) { console.error("updateActiveLang: no session"); return; }
+  const { data, error } = await supabase
     .from("profiles")
     .update({ lang })
-    .eq("id", state.activeId)
-    .select("id")
-    .single();
-  if (error) {
-    console.error("updateActiveLang", error.message);
-    // rollback by refetching
+    .eq("id", activeId)
+    .eq("user_id", sess.user.id)
+    .select("id, lang");
+  if (error || !data || data.length === 0) {
+    console.error("updateActiveLang failed", error?.message, "rows:", data?.length);
     await fetchProfiles();
   }
 }
@@ -261,6 +264,12 @@ export function useAuthReady(): boolean {
   const mounted = useHasMounted();
   const s = useStore();
   return mounted && s.hydrated && !s.loading;
+}
+
+// True while we know a session exists but profile data may still be loading.
+// Use this to AVOID redirecting authenticated users to landing on refresh.
+export function useHasSession(): boolean {
+  return useStore().hasSession;
 }
 
 export function ageFromDob(dob: string | null): number | null {

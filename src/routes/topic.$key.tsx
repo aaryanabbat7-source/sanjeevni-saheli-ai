@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { ArrowLeft, ChevronDown, MessageCircle, Search } from "lucide-react";
 import { PageShell, Disclaimer } from "@/components/PageShell";
 import { t, type TopicKey } from "@/lib/i18n";
-import { useUser, useAuthReady } from "@/lib/user-store";
+import { useUser, useAuthReady, useHasSession } from "@/lib/user-store";
 import { TOPICS } from "@/lib/topics";
 
 export const Route = createFileRoute("/topic/$key")({
@@ -14,6 +14,7 @@ export const Route = createFileRoute("/topic/$key")({
 function TopicPage() {
   const { key } = Route.useParams();
   const ready = useAuthReady();
+  const hasSession = useHasSession();
   const user = useUser();
   const nav = useNavigate();
   const [open, setOpen] = useState<number | null>(0);
@@ -24,7 +25,7 @@ function TopicPage() {
 
   useEffect(() => {
     if (!topic) nav({ to: "/dashboard" });
-    else if (ready && !user) nav({ to: "/" });
+    else if (ready && !user && !hasSession) nav({ to: "/" });
   }, [topic, ready, user, nav]);
 
   if (!topic || !user) return null;

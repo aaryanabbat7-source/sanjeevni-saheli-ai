@@ -7,7 +7,7 @@ import { ArrowLeft, Mic, Send, Volume2, Phone, AlertTriangle, Square, Copy, Chec
 import { PageShell } from "@/components/PageShell";
 import { Logo } from "@/components/Logo";
 import { t, bcp47 } from "@/lib/i18n";
-import { useUser, useAuthReady, ageFromDob } from "@/lib/user-store";
+import { useUser, useAuthReady, useHasSession, ageFromDob } from "@/lib/user-store";
 import { detectEmergency } from "@/lib/topics";
 import { createThread, getThread, saveThread, useChatThreads } from "@/lib/chat-store";
 import { z } from "zod";
@@ -24,6 +24,7 @@ export const Route = createFileRoute("/chat")({
 
 function ChatPage() {
   const ready = useAuthReady();
+  const hasSession = useHasSession();
   const user = useUser();
   const nav = useNavigate();
   const { q, threadId } = Route.useSearch();
@@ -31,7 +32,7 @@ function ChatPage() {
   useChatThreads();
 
   useEffect(() => {
-    if (ready && !user) nav({ to: "/" });
+    if (ready && !user && !hasSession) nav({ to: "/" });
   }, [ready, user, nav]);
 
   // Resolve / create active thread

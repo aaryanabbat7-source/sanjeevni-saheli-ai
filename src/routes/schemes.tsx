@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { ArrowLeft, ChevronDown, MapPin, MessageCircle, Search, Sparkles } from "lucide-react";
 import { PageShell, Disclaimer } from "@/components/PageShell";
 import { t } from "@/lib/i18n";
-import { useAuthReady, useUser } from "@/lib/user-store";
+import { useAuthReady, useUser, useHasSession } from "@/lib/user-store";
 import { TOPICS } from "@/lib/topics";
 
 const LOCATION_KEY = "saheli.schemesLocation.v1";
@@ -38,6 +38,7 @@ export const Route = createFileRoute("/schemes")({
 
 function SchemesPage() {
   const ready = useAuthReady();
+  const hasSession = useHasSession();
   const user = useUser();
   const nav = useNavigate();
   const [loc, setLoc] = useState<SavedLocation | null>(null);
@@ -46,7 +47,7 @@ function SchemesPage() {
   const [open, setOpen] = useState<number | null>(0);
   const [q, setQ] = useState("");
 
-  useEffect(() => { if (ready && !user) nav({ to: "/" }); }, [ready, user, nav]);
+  useEffect(() => { if (ready && !user && !hasSession) nav({ to: "/" }); }, [ready, user, nav]);
   useEffect(() => { if (ready) setLoc(loadLocation()); }, [ready]);
 
   if (!user) return null;

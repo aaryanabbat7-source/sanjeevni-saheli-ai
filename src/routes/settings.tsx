@@ -15,13 +15,14 @@ export const Route = createFileRoute("/settings")({
 
 function SettingsPage() {
   const ready = useAuthReady();
+  const hasSession = useHasSession();
   const user = useUser();
   const store = useStore();
   const nav = useNavigate();
   const [showLangs, setShowLangs] = useState(false);
 
   useEffect(() => {
-    if (ready && !user) nav({ to: "/" });
+    if (ready && !user && !hasSession) nav({ to: "/" });
   }, [ready, user, nav]);
 
   if (!user) return null;

@@ -22,6 +22,7 @@ interface Store {
   draft: Draft;
   hydrated: boolean;
   loading: boolean;
+  hasSession: boolean;
 }
 
 export const MAX_PER_MOBILE = 3;
@@ -174,20 +175,22 @@ export async function removeProfile(id: string) {
 }
 
 export async function updateActiveLang(lang: Lang) {
-  if (!state.activeId) return;
+  const activeId = state.activeId;
+  if (!activeId) return;
   // optimistic
   set({
-    profiles: state.profiles.map((p) => (p.id === state.activeId ? { ...p, lang } : p)),
+    profiles: state.profiles.map((p) => (p.id === activeId ? { ...p, lang } : p)),
   });
-  const { error } = await supabase
+  const { data: sess } = await supabase.auth.getUser();
+  if (!sess.user) { console.error("updateActiveLang: no session"); return; }
+  const { data, error } = await supabase
     .from("profiles")
     .update({ lang })
-    .eq("id", state.activeId)
-    .select("id")
-    .single();
-  if (error) {
-    console.error("updateActiveLang", error.message);
-    // rollback by refetching
+    .eq("id", activeId)
+    .eq("user_id", sess.user.id)
+    .select("id, lang");
+  if (error || !data || data.length === 0) {
+    console.error("updateActiveLang failed", error?.message, "rows:", data?.length);
     await fetchProfiles();
   }
 }

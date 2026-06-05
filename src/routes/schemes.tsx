@@ -6,10 +6,11 @@ import { PageShell, Disclaimer } from "@/components/PageShell";
 import { t } from "@/lib/i18n";
 import { useAuthReady, useUser, useHasSession } from "@/lib/user-store";
 import { TOPICS } from "@/lib/topics";
+import { getCountry } from "@/lib/countries";
 
-const LOCATION_KEY = "saheli.schemesLocation.v1";
+const LOCATION_KEY = "saheli.schemesLocation.v2";
 
-interface SavedLocation { city: string; state: string }
+interface SavedLocation { city: string; state: string; country: string }
 
 function loadLocation(): SavedLocation | null {
   if (typeof window === "undefined") return null;

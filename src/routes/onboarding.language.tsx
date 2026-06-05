@@ -57,7 +57,7 @@ function LanguagePage() {
         <div className="mt-10 flex justify-center">
           <button
             disabled={!draft.lang}
-            onClick={() => nav({ to: "/onboarding/mobile" })}
+            onClick={() => nav({ to: "/onboarding/country" })}
             className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-7 py-3.5 font-semibold text-primary-foreground shadow-glow hover:scale-[1.02] transition disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {dict.continue} <ArrowRight className="size-4" />

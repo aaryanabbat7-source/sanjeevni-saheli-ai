@@ -102,7 +102,7 @@ function SchemesPage() {
           {loc && (
             <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-white/20 px-3 py-1.5 text-xs">
               <MapPin className="size-3.5" />
-              {loc.city}, {loc.state}
+              {userCountry.flag} {loc.city}, {loc.state}
               <button onClick={clearLocation} className="ml-2 underline">Change</button>
             </div>
           )}
@@ -210,8 +210,13 @@ function SchemesPage() {
         </div>
 
         <h2 className="mt-6 text-sm font-bold text-muted-foreground uppercase tracking-wide">
-          Central Government schemes
+          {userCountry.code === "IN" ? "Central Government schemes" : `Featured schemes — ${userCountry.name}`}
         </h2>
+        {userCountry.code !== "IN" && (
+          <p className="text-xs text-muted-foreground mt-1">
+            The list below is curated for India. For {userCountry.name}-specific national schemes, tap "Ask Sanjeevni" on either card above.
+          </p>
+        )}
         <div className="mt-3 space-y-3">
           {subs.map((s, i) => (
             <motion.div

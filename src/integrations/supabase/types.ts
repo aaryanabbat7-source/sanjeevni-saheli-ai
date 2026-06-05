@@ -122,6 +122,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          country: string
           created_at: string
           dob: string
           gender: string
@@ -129,9 +130,11 @@ export type Database = {
           lang: string
           mobile: string
           name: string
+          pincode: string | null
           user_id: string
         }
         Insert: {
+          country?: string
           created_at?: string
           dob: string
           gender: string
@@ -139,9 +142,11 @@ export type Database = {
           lang?: string
           mobile: string
           name: string
+          pincode?: string | null
           user_id: string
         }
         Update: {
+          country?: string
           created_at?: string
           dob?: string
           gender?: string
@@ -149,6 +154,7 @@ export type Database = {
           lang?: string
           mobile?: string
           name?: string
+          pincode?: string | null
           user_id?: string
         }
         Relationships: []

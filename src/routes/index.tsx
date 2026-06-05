@@ -8,6 +8,7 @@ import { t } from "@/lib/i18n";
 import { TOPICS } from "@/lib/topics";
 import { useHasMounted, useUser, clearDraft } from "@/lib/user-store";
 
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -105,7 +106,7 @@ function Landing() {
             </a>
           </div>
           <div className="mt-8">
-            <EmergencyBar dict={dict} female />
+            <EmergencyBar dict={dict} female country={user?.country} />
           </div>
         </div>
 

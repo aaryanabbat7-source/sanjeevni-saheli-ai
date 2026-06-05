@@ -46,8 +46,8 @@
 :root {
   --radius: 1.25rem;
 
-  /* Brand — warm wellness palette (terracotta coral + deep teal + gold) */
-  --background: oklch(0.985 0.008 60);
+  /* Brand — vibrant wellness: coral + sage + sunshine on warm cream */
+  --background: oklch(0.985 0.012 70);
   --foreground: oklch(0.22 0.04 250);
 
   --card: oklch(1 0 0);
@@ -55,52 +55,53 @@
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.22 0.04 250);
 
-  /* Primary: warm terracotta coral #d4664a — friendly, gender-neutral wellness */
-  --primary: oklch(0.62 0.16 35);
+  /* Primary: vivid coral — energetic, gender-neutral wellness */
+  --primary: oklch(0.66 0.21 32);
   --primary-foreground: oklch(0.99 0.005 60);
-  --primary-glow: oklch(0.74 0.14 45);
+  --primary-glow: oklch(0.78 0.18 40);
 
-  /* Secondary: deep teal #2d6e7e — trust, calm */
-  --secondary: oklch(0.5 0.08 200);
+  /* Secondary: fresh sage green — natural, grounded */
+  --secondary: oklch(0.58 0.15 145);
   --secondary-foreground: oklch(0.99 0.005 60);
 
-  --muted: oklch(0.96 0.015 60);
+  --muted: oklch(0.96 0.018 70);
   --muted-foreground: oklch(0.5 0.03 250);
 
-  --accent: oklch(0.86 0.10 80);   /* warm gold accent */
+  --accent: oklch(0.82 0.18 85);   /* sunshine gold accent */
   --accent-foreground: oklch(0.28 0.06 60);
 
-  --destructive: oklch(0.58 0.22 25);
+  --destructive: oklch(0.6 0.24 25);
   --destructive-foreground: oklch(0.99 0 0);
 
-  --border: oklch(0.91 0.02 60);
-  --input: oklch(0.94 0.018 60);
-  --ring: oklch(0.62 0.16 35);
+  --border: oklch(0.9 0.025 70);
+  --input: oklch(0.94 0.02 70);
+  --ring: oklch(0.66 0.21 32);
 
   /* Category colors */
-  --menstrual: oklch(0.62 0.18 350);     /* rose */
-  --nutrition: oklch(0.6 0.16 150);      /* green */
-  --vaccine: oklch(0.55 0.16 240);       /* blue */
-  --emergency: oklch(0.58 0.24 25);      /* red */
-  --pregnancy: oklch(0.55 0.18 300);     /* violet */
-  --schemes: oklch(0.62 0.16 70);        /* saffron/amber */
+  --menstrual: oklch(0.66 0.22 350);     /* rose */
+  --nutrition: oklch(0.62 0.18 150);     /* green */
+  --vaccine: oklch(0.58 0.18 240);       /* blue */
+  --emergency: oklch(0.6 0.26 25);       /* red */
+  --pregnancy: oklch(0.58 0.20 300);     /* violet */
+  --schemes: oklch(0.7 0.18 70);         /* saffron */
 
-  /* Gradients — coral → teal */
-  --gradient-primary: linear-gradient(135deg, oklch(0.7 0.16 40), oklch(0.5 0.10 200));
-  --gradient-soft: linear-gradient(180deg, oklch(0.985 0.008 60), oklch(0.96 0.025 50));
-  --gradient-hero: radial-gradient(ellipse at top right, oklch(0.88 0.10 40 / 0.6), transparent 60%),
-                   radial-gradient(ellipse at bottom left, oklch(0.85 0.08 200 / 0.5), transparent 55%),
-                   linear-gradient(180deg, oklch(0.985 0.008 60), oklch(0.97 0.02 50));
-  --gradient-menstrual: linear-gradient(135deg, oklch(0.78 0.16 350), oklch(0.6 0.20 340));
-  --gradient-nutrition: linear-gradient(135deg, oklch(0.78 0.16 150), oklch(0.5 0.16 165));
-  --gradient-vaccine: linear-gradient(135deg, oklch(0.72 0.14 245), oklch(0.5 0.16 240));
-  --gradient-emergency: linear-gradient(135deg, oklch(0.74 0.18 30), oklch(0.55 0.24 20));
-  --gradient-pregnancy: linear-gradient(135deg, oklch(0.76 0.16 310), oklch(0.55 0.20 295));
-  --gradient-schemes: linear-gradient(135deg, oklch(0.78 0.16 80), oklch(0.55 0.18 50));
+  /* Gradients — coral → sage with sunshine highlights */
+  --gradient-primary: linear-gradient(135deg, oklch(0.74 0.20 35), oklch(0.6 0.16 150));
+  --gradient-soft: linear-gradient(180deg, oklch(0.99 0.012 70), oklch(0.95 0.04 60));
+  --gradient-hero: radial-gradient(ellipse at top right, oklch(0.85 0.16 40 / 0.55), transparent 60%),
+                   radial-gradient(ellipse at top left, oklch(0.86 0.14 85 / 0.45), transparent 55%),
+                   radial-gradient(ellipse at bottom left, oklch(0.84 0.14 150 / 0.5), transparent 60%),
+                   linear-gradient(180deg, oklch(0.99 0.012 70), oklch(0.97 0.025 60));
+  --gradient-menstrual: linear-gradient(135deg, oklch(0.78 0.18 350), oklch(0.62 0.22 340));
+  --gradient-nutrition: linear-gradient(135deg, oklch(0.78 0.18 150), oklch(0.52 0.18 165));
+  --gradient-vaccine: linear-gradient(135deg, oklch(0.74 0.16 245), oklch(0.52 0.18 240));
+  --gradient-emergency: linear-gradient(135deg, oklch(0.76 0.20 30), oklch(0.56 0.26 20));
+  --gradient-pregnancy: linear-gradient(135deg, oklch(0.78 0.18 310), oklch(0.56 0.22 295));
+  --gradient-schemes: linear-gradient(135deg, oklch(0.82 0.18 80), oklch(0.58 0.20 50));
 
   /* Shadows */
-  --shadow-soft: 0 4px 24px -8px oklch(0.55 0.16 35 / 0.18);
-  --shadow-glow: 0 8px 40px -8px oklch(0.62 0.16 35 / 0.35);
+  --shadow-soft: 0 4px 24px -8px oklch(0.55 0.18 35 / 0.22);
+  --shadow-glow: 0 8px 40px -8px oklch(0.66 0.21 32 / 0.40);
   --shadow-card: 0 2px 12px -4px oklch(0.4 0.06 250 / 0.08), 0 12px 32px -16px oklch(0.4 0.06 250 / 0.12);
 
   /* Transitions */

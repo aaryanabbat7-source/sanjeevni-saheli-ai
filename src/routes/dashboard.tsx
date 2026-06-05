@@ -121,7 +121,7 @@ function Dashboard() {
         </div>
 
         <div className="mt-10">
-          <EmergencyBar dict={dict} female={user.gender === "female"} />
+          <EmergencyBar dict={dict} female={user.gender === "female"} country={user.country} />
         </div>
         <Disclaimer text={dict.disclaimer} />
       </div>

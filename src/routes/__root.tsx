@@ -9,13 +9,15 @@ import {
 } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
+import { LogoStacked } from "@/components/Logo";
+import { SplashIntro } from "@/components/SplashIntro";
 
 function NotFoundComponent() {
   return (
     <div className="flex min-h-dvh items-center justify-center bg-gradient-hero px-4">
       <div className="max-w-md text-center">
-        <div className="mx-auto size-20 rounded-full bg-gradient-primary grid place-items-center text-4xl shadow-glow">🌸</div>
-        <h1 className="mt-6 text-5xl font-bold text-gradient">404</h1>
+        <LogoStacked size={140} />
+        <h1 className="mt-8 text-6xl font-bold text-gradient">404</h1>
         <h2 className="mt-2 text-xl font-semibold">Page not found</h2>
         <p className="mt-2 text-sm text-muted-foreground">This page doesn't exist.</p>
         <Link to="/" className="mt-6 inline-flex rounded-full bg-gradient-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-glow">
@@ -105,6 +107,7 @@ function RootComponent() {
   }
   return (
     <QueryClientProvider client={queryClient}>
+      <SplashIntro />
       <Outlet />
     </QueryClientProvider>
   );

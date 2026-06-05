@@ -11,6 +11,8 @@ export interface UserProfile {
   dob: string | null;
   gender: Gender | null;
   lang: Lang;
+  country: string;
+  pincode: string | null;
   createdAt: number;
 }
 
@@ -60,6 +62,7 @@ function mobileToEmail(mobile: string) {
 function rowToProfile(r: {
   id: string; mobile: string; name: string; dob: string | null;
   gender: string | null; lang: string; created_at: string;
+  country?: string | null; pincode?: string | null;
 }): UserProfile {
   return {
     id: r.id,
@@ -68,6 +71,8 @@ function rowToProfile(r: {
     dob: r.dob,
     gender: (r.gender as Gender) ?? null,
     lang: (r.lang as Lang) ?? "en",
+    country: r.country ?? "IN",
+    pincode: r.pincode ?? null,
     createdAt: new Date(r.created_at).getTime(),
   };
 }
@@ -212,6 +217,8 @@ export async function commitDraft(): Promise<UserProfile | { error: string }> {
       dob: d.dob,
       gender: d.gender,
       lang: d.lang,
+      country: d.country ?? "IN",
+      pincode: d.pincode ?? null,
     })
     .select("*")
     .single();

@@ -25,6 +25,7 @@ import { Route as OnboardingMobileRouteImport } from './routes/onboarding.mobile
 import { Route as OnboardingLanguageRouteImport } from './routes/onboarding.language'
 import { Route as OnboardingGenderRouteImport } from './routes/onboarding.gender'
 import { Route as OnboardingDobRouteImport } from './routes/onboarding.dob'
+import { Route as OnboardingCountryRouteImport } from './routes/onboarding.country'
 import { Route as EmployeeLoginRouteImport } from './routes/employee.login'
 import { Route as ApiTranslateRouteImport } from './routes/api/translate'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
@@ -109,6 +110,11 @@ const OnboardingDobRoute = OnboardingDobRouteImport.update({
   path: '/onboarding/dob',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OnboardingCountryRoute = OnboardingCountryRouteImport.update({
+  id: '/onboarding/country',
+  path: '/onboarding/country',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EmployeeLoginRoute = EmployeeLoginRouteImport.update({
   id: '/employee/login',
   path: '/employee/login',
@@ -137,6 +143,7 @@ export interface FileRoutesByFullPath {
   '/api/chat': typeof ApiChatRoute
   '/api/translate': typeof ApiTranslateRoute
   '/employee/login': typeof EmployeeLoginRoute
+  '/onboarding/country': typeof OnboardingCountryRoute
   '/onboarding/dob': typeof OnboardingDobRoute
   '/onboarding/gender': typeof OnboardingGenderRoute
   '/onboarding/language': typeof OnboardingLanguageRoute
@@ -158,6 +165,7 @@ export interface FileRoutesByTo {
   '/api/chat': typeof ApiChatRoute
   '/api/translate': typeof ApiTranslateRoute
   '/employee/login': typeof EmployeeLoginRoute
+  '/onboarding/country': typeof OnboardingCountryRoute
   '/onboarding/dob': typeof OnboardingDobRoute
   '/onboarding/gender': typeof OnboardingGenderRoute
   '/onboarding/language': typeof OnboardingLanguageRoute
@@ -180,6 +188,7 @@ export interface FileRoutesById {
   '/api/chat': typeof ApiChatRoute
   '/api/translate': typeof ApiTranslateRoute
   '/employee/login': typeof EmployeeLoginRoute
+  '/onboarding/country': typeof OnboardingCountryRoute
   '/onboarding/dob': typeof OnboardingDobRoute
   '/onboarding/gender': typeof OnboardingGenderRoute
   '/onboarding/language': typeof OnboardingLanguageRoute
@@ -203,6 +212,7 @@ export interface FileRouteTypes {
     | '/api/chat'
     | '/api/translate'
     | '/employee/login'
+    | '/onboarding/country'
     | '/onboarding/dob'
     | '/onboarding/gender'
     | '/onboarding/language'
@@ -224,6 +234,7 @@ export interface FileRouteTypes {
     | '/api/chat'
     | '/api/translate'
     | '/employee/login'
+    | '/onboarding/country'
     | '/onboarding/dob'
     | '/onboarding/gender'
     | '/onboarding/language'
@@ -245,6 +256,7 @@ export interface FileRouteTypes {
     | '/api/chat'
     | '/api/translate'
     | '/employee/login'
+    | '/onboarding/country'
     | '/onboarding/dob'
     | '/onboarding/gender'
     | '/onboarding/language'
@@ -267,6 +279,7 @@ export interface RootRouteChildren {
   ApiChatRoute: typeof ApiChatRoute
   ApiTranslateRoute: typeof ApiTranslateRoute
   EmployeeLoginRoute: typeof EmployeeLoginRoute
+  OnboardingCountryRoute: typeof OnboardingCountryRoute
   OnboardingDobRoute: typeof OnboardingDobRoute
   OnboardingGenderRoute: typeof OnboardingGenderRoute
   OnboardingLanguageRoute: typeof OnboardingLanguageRoute
@@ -391,6 +404,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OnboardingDobRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/onboarding/country': {
+      id: '/onboarding/country'
+      path: '/onboarding/country'
+      fullPath: '/onboarding/country'
+      preLoaderRoute: typeof OnboardingCountryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/employee/login': {
       id: '/employee/login'
       path: '/employee/login'
@@ -427,6 +447,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiChatRoute: ApiChatRoute,
   ApiTranslateRoute: ApiTranslateRoute,
   EmployeeLoginRoute: EmployeeLoginRoute,
+  OnboardingCountryRoute: OnboardingCountryRoute,
   OnboardingDobRoute: OnboardingDobRoute,
   OnboardingGenderRoute: OnboardingGenderRoute,
   OnboardingLanguageRoute: OnboardingLanguageRoute,

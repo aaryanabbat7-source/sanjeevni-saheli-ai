@@ -67,7 +67,7 @@ function ChatPage() {
     messages: initialMessages,
     transport: new DefaultChatTransport({
       api: "/api/chat",
-      body: { lang, profile: { name: user?.name, age: age ?? undefined, gender: user?.gender ?? undefined } },
+      body: { lang, profile: { name: user?.name, age: age ?? undefined, gender: user?.gender ?? undefined, country: user?.country, pincode: user?.pincode ?? undefined } },
     }),
   });
 

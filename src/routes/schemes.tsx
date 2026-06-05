@@ -59,12 +59,14 @@ function SchemesPage() {
     (s) => !q || (s.title + s.preview + s.detail).toLowerCase().includes(q.toLowerCase()),
   );
 
+  const userCountry = getCountry(user?.country);
+
   function submitLocation(e: React.FormEvent) {
     e.preventDefault();
     const c = city.trim();
     const s = state.trim();
     if (!c || !s) return;
-    const next = { city: c, state: s };
+    const next = { city: c, state: s, country: userCountry.code };
     saveLocation(next);
     setLoc(next);
   }
@@ -77,10 +79,10 @@ function SchemesPage() {
   }
 
   const stateSchemesQuery = loc
-    ? `List the most important state government health, maternity, nutrition, vaccination and women's welfare schemes in ${loc.state} (India) — give scheme name, who it is for, the benefit amount or item, and how to apply. Use simple words.`
+    ? `List the most important regional/state government health, maternity, nutrition, vaccination and women's & family welfare schemes in ${loc.state}, ${userCountry.name} — give scheme name, who it is for, the benefit amount or item, and how to apply. Scope: ${userCountry.schemesScope}. Use simple words.`
     : "";
   const localSchemesQuery = loc
-    ? `List the local district / municipal health and women's welfare schemes available in ${loc.city}, ${loc.state} (India) — include city-level helplines, urban PHC/UHC services, free ambulance numbers and any city-specific maternal or sanitary scheme. Use simple words.`
+    ? `List the local district / municipal health and welfare schemes available in ${loc.city}, ${loc.state}, ${userCountry.name} — include city-level helplines, public health centres, free ambulance numbers and any city-specific maternal or sanitary scheme. Use simple words.`
     : "";
 
   return (
@@ -117,28 +119,38 @@ function SchemesPage() {
           >
             <div className="flex items-center gap-2 text-sm font-semibold">
               <MapPin className="size-4 text-primary" />
-              Tell us your city to get state & local schemes
+              Tell us your city to get regional & local schemes
             </div>
             <p className="text-xs text-muted-foreground mt-1">
-              We'll show central schemes for everyone, plus schemes specific to your state and city.
+              {userCountry.flag} {userCountry.name} — we'll personalise central, regional and city schemes for you.
             </p>
             <div className="mt-4 grid sm:grid-cols-2 gap-3">
               <input
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
-                placeholder="Your city (e.g. Lucknow)"
+                placeholder="Your city"
                 className="rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary/40"
                 required
               />
-              <select
-                value={state}
-                onChange={(e) => setState(e.target.value)}
-                className="rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary/40"
-                required
-              >
-                <option value="">Select your state</option>
-                {INDIAN_STATES.map((s) => <option key={s} value={s}>{s}</option>)}
-              </select>
+              {userCountry.code === "IN" ? (
+                <select
+                  value={state}
+                  onChange={(e) => setState(e.target.value)}
+                  className="rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary/40"
+                  required
+                >
+                  <option value="">Select your state</option>
+                  {INDIAN_STATES.map((s) => <option key={s} value={s}>{s}</option>)}
+                </select>
+              ) : (
+                <input
+                  value={state}
+                  onChange={(e) => setState(e.target.value)}
+                  placeholder="State / Province / Region"
+                  className="rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary/40"
+                  required
+                />
+              )}
             </div>
             <button
               type="submit"

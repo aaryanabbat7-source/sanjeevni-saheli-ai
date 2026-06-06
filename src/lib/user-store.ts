@@ -221,12 +221,13 @@ export async function commitDraft(): Promise<UserProfile | { error: string }> {
       lang: d.lang,
       country: d.country ?? "IN",
       pincode: d.pincode ?? null,
+      description: d.description ?? null,
     })
     .select("*")
     .single();
   if (error) {
     const msg = error.message?.includes("Minimum age")
-      ? "Minimum age allowed is 9 years."
+      ? "Minimum age allowed is 12 years."
       : error.message?.includes("Only 3")
       ? `Only ${MAX_PER_MOBILE} profiles allowed per mobile number.`
       : error.message;
@@ -241,6 +242,25 @@ export async function commitDraft(): Promise<UserProfile | { error: string }> {
   saveActive(profile.id);
   saveDraft({});
   return profile;
+}
+
+// Update country + pincode + description for the active profile
+export async function updateActiveLocale(patch: { country?: string; pincode?: string | null; description?: string | null }) {
+  const activeId = state.activeId;
+  if (!activeId) return { error: "No active profile." };
+  const { data: sess } = await supabase.auth.getUser();
+  if (!sess.user) return { error: "Not signed in." };
+  // optimistic
+  set({
+    profiles: state.profiles.map((p) => (p.id === activeId ? { ...p, ...patch } as UserProfile : p)),
+  });
+  const { error } = await supabase
+    .from("profiles")
+    .update(patch)
+    .eq("id", activeId)
+    .eq("user_id", sess.user.id);
+  if (error) { await fetchProfiles(); return { error: error.message }; }
+  return {};
 }
 
 // Legacy helper kept for routes that ask by mobile (always = current authed mobile)

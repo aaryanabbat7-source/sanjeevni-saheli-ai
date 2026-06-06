@@ -1,6 +1,6 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { ArrowRight, Globe } from "lucide-react";
+import { ArrowRight, ArrowLeft, Globe } from "lucide-react";
 import { PageShell } from "@/components/PageShell";
 import { Logo } from "@/components/Logo";
 import { LANGUAGES, t, type Lang } from "@/lib/i18n";
@@ -28,36 +28,39 @@ function LanguagePage() {
           <p className="mt-2 text-muted-foreground">{dict.chooseLangSub}</p>
         </motion.div>
 
-        <div className="mt-8 grid sm:grid-cols-3 gap-4">
+        <div className="mt-8 grid grid-cols-2 sm:grid-cols-3 gap-3">
           {LANGUAGES.map((l, i) => {
             const active = draft.lang === l.code;
             return (
               <motion.button
                 key={l.code}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 + i * 0.08 }}
-                whileHover={{ y: -6 }}
+                transition={{ delay: 0.04 + i * 0.04 }}
+                whileHover={{ y: -4 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => setDraft({ lang: l.code })}
-                className={`rounded-3xl p-6 text-center transition border-2 ${
+                className={`rounded-2xl p-4 text-center transition border-2 ${
                   active
                     ? "border-primary bg-gradient-primary text-primary-foreground shadow-glow"
                     : "border-border bg-card hover:border-primary/40 shadow-card"
                 }`}
               >
-                <div className="text-4xl">{l.flag}</div>
-                <div className={`mt-3 text-2xl font-bold ${active ? "" : "text-foreground"}`}>{l.native}</div>
-                <div className={`text-xs uppercase tracking-widest mt-1 ${active ? "text-primary-foreground/80" : "text-muted-foreground"}`}>{l.english}</div>
+                <div className="text-3xl">{l.flag}</div>
+                <div className={`mt-2 text-lg font-bold leading-tight ${active ? "" : "text-foreground"}`}>{l.native}</div>
+                <div className={`text-[10px] uppercase tracking-widest mt-0.5 ${active ? "text-primary-foreground/80" : "text-muted-foreground"}`}>{l.english}</div>
               </motion.button>
             );
           })}
         </div>
 
-        <div className="mt-10 flex justify-center">
+        <div className="mt-10 flex justify-between gap-3">
+          <Link to="/onboarding/country" className="inline-flex items-center gap-1.5 rounded-full bg-card border border-border px-5 py-3 text-sm font-semibold text-muted-foreground hover:text-foreground transition">
+            <ArrowLeft className="size-4" /> {dict.back}
+          </Link>
           <button
             disabled={!draft.lang}
-            onClick={() => nav({ to: "/onboarding/country" })}
+            onClick={() => nav({ to: "/onboarding/mobile" })}
             className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-7 py-3.5 font-semibold text-primary-foreground shadow-glow hover:scale-[1.02] transition disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {dict.continue} <ArrowRight className="size-4" />

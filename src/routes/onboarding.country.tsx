@@ -17,18 +17,23 @@ function CountryPage() {
   const dict = t[draft.lang ?? "en"];
   const [code, setCode] = useState(draft.country ?? "IN");
   const [pincode, setPincode] = useState(draft.pincode ?? "");
+  const [error, setError] = useState("");
   const country = getCountry(code);
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
-    setDraft({ country: code, pincode: pincode.trim() || undefined });
-    nav({ to: "/onboarding/mobile" });
+    const trimmed = pincode.trim();
+    if (trimmed && country.pincodeRegex && !country.pincodeRegex.test(trimmed)) {
+      return setError(`Please enter a valid ${country.name} ${country.pincodeLabel.replace(" (optional)", "")}.`);
+    }
+    setDraft({ country: code, pincode: trimmed || undefined });
+    nav({ to: "/onboarding/language" });
   }
 
   return (
     <PageShell>
       <div className="mx-auto max-w-2xl px-5 py-10">
-        <Link to="/onboarding/language" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+        <Link to="/" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
           <ArrowLeft className="size-4" /> {dict.back}
         </Link>
 
@@ -50,7 +55,7 @@ function CountryPage() {
                 <button
                   key={c.code}
                   type="button"
-                  onClick={() => setCode(c.code)}
+                  onClick={() => { setCode(c.code); setError(""); }}
                   className={`rounded-2xl border-2 p-4 text-left transition ${
                     active
                       ? "border-primary bg-gradient-primary text-primary-foreground shadow-glow"
@@ -59,7 +64,7 @@ function CountryPage() {
                 >
                   <div className="text-3xl">{c.flag}</div>
                   <div className={`mt-2 font-bold ${active ? "" : "text-foreground"}`}>{c.name}</div>
-                  <div className={`text-[11px] tracking-wider ${active ? "text-primary-foreground/80" : "text-muted-foreground"}`}>{c.dialPrefix}</div>
+                  <div className={`text-[11px] tracking-wider ${active ? "text-primary-foreground/80" : "text-muted-foreground"}`}>{c.dialPrefix} · {c.mobileLengths.join("/")}d</div>
                 </button>
               );
             })}
@@ -71,14 +76,17 @@ function CountryPage() {
             </label>
             <input
               value={pincode}
-              onChange={(e) => setPincode(e.target.value.replace(/[^a-zA-Z0-9 -]/g, "").slice(0, 12))}
-              placeholder="e.g. 110001"
+              onChange={(e) => { setPincode(e.target.value.replace(/[^a-zA-Z0-9 -]/g, "").slice(0, 12)); setError(""); }}
+              placeholder={country.pincodePlaceholder ?? "Postal code"}
               className="w-full rounded-2xl bg-card border-2 border-border focus:border-primary px-5 py-3.5 text-base outline-none transition shadow-soft focus:shadow-glow tracking-wider"
               aria-label={country.pincodeLabel}
             />
-            <p className="mt-1.5 text-xs text-muted-foreground">
-              Optional — helps us surface local schemes & helplines later.
-            </p>
+            {error && <p className="mt-1.5 text-sm text-destructive">{error}</p>}
+            {!error && (
+              <p className="mt-1.5 text-xs text-muted-foreground">
+                Optional — used for local schemes & helplines.
+              </p>
+            )}
           </div>
 
           <button type="submit"

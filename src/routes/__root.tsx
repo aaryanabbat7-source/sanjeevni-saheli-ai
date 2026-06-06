@@ -53,7 +53,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
-      { name: "theme-color", content: "#e91e8c" },
+      { name: "theme-color", content: "#e8633b" },
       { title: "Sanjeevni Saheli AI — Your Trusted Health Companion" },
       { name: "description", content: "Multilingual AI-powered healthcare companion for Indian families. Trusted guidance in Hindi, Bengali and English." },
       { property: "og:title", content: "Sanjeevni Saheli AI — Your Trusted Health Companion" },

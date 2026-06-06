@@ -13,6 +13,7 @@ export interface UserProfile {
   lang: Lang;
   country: string;
   pincode: string | null;
+  description: string | null;
   createdAt: number;
 }
 
@@ -62,7 +63,7 @@ function mobileToEmail(mobile: string) {
 function rowToProfile(r: {
   id: string; mobile: string; name: string; dob: string | null;
   gender: string | null; lang: string; created_at: string;
-  country?: string | null; pincode?: string | null;
+  country?: string | null; pincode?: string | null; description?: string | null;
 }): UserProfile {
   return {
     id: r.id,
@@ -73,6 +74,7 @@ function rowToProfile(r: {
     lang: (r.lang as Lang) ?? "en",
     country: r.country ?? "IN",
     pincode: r.pincode ?? null,
+    description: r.description ?? null,
     createdAt: new Date(r.created_at).getTime(),
   };
 }

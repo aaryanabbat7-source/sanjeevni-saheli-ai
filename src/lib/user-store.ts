@@ -96,6 +96,29 @@ export async function fetchProfiles() {
     saveActive(activeId);
   }
   set({ profiles, activeId, loading: false, hydrated: true });
+  subscribeProfilesRealtime();
+}
+
+let profilesSub: { unsubscribe: () => void } | null = null;
+function subscribeProfilesRealtime() {
+  if (profilesSub || typeof window === "undefined") return;
+  const channel = supabase
+    .channel("sanjeevni-profiles")
+    .on("postgres_changes", { event: "*", schema: "public", table: "profiles" }, () => {
+      void fetchProfilesQuiet();
+    })
+    .subscribe();
+  profilesSub = { unsubscribe: () => { void supabase.removeChannel(channel); profilesSub = null; } };
+}
+
+async function fetchProfilesQuiet() {
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("*")
+    .order("created_at", { ascending: true });
+  if (error || !data) return;
+  const profiles = data.map(rowToProfile);
+  set({ profiles });
 }
 
 export function clearProfiles() {

@@ -1,13 +1,14 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { useEffect } from "react";
-import { ArrowRight, MessageCircle, Globe, Settings, List } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ArrowRight, MessageCircle, Globe, Settings, List, MapPin, X, Save } from "lucide-react";
 import { PageShell, Disclaimer } from "@/components/PageShell";
 import { EmergencyBar } from "@/components/EmergencyBar";
 import { Logo } from "@/components/Logo";
 import { t } from "@/lib/i18n";
-import { useUser, useAuthReady, useHasSession } from "@/lib/user-store";
+import { useUser, useAuthReady, useHasSession, updateActiveLocale } from "@/lib/user-store";
 import { TOPICS } from "@/lib/topics";
+import { COUNTRIES, getCountry } from "@/lib/countries";
 
 export const Route = createFileRoute("/dashboard")({
   component: Dashboard,
@@ -52,6 +53,9 @@ function Dashboard() {
           <h1 className="text-3xl md:text-4xl font-bold">{user.name} 💖</h1>
           <p className="mt-2 text-muted-foreground">{dict.dashboardSub}</p>
         </motion.div>
+
+        <LocationPrompt user={user} />
+
 
         <div className="mt-6 grid sm:grid-cols-[1fr_auto] gap-3 items-stretch">
           <Link to="/chat" className="block rounded-3xl p-1 bg-gradient-primary shadow-glow hover:shadow-soft transition hover:scale-[1.01]">

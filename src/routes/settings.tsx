@@ -1,13 +1,14 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowLeft, Globe, LogOut, Check, UserPlus, Trash2, Lock, Phone } from "lucide-react";
+import { ArrowLeft, Globe, LogOut, Check, UserPlus, Trash2, Lock, Phone, MapPin, Save } from "lucide-react";
 import { PageShell } from "@/components/PageShell";
 import { Logo } from "@/components/Logo";
 import { LANGUAGES, t, type Lang } from "@/lib/i18n";
 import {
   useUser, useStore, useAuthReady, useHasSession, setActive, logout, removeProfile,
-  updateActiveLang, clearDraft, setDraft, profilesByMobile, MAX_PER_MOBILE,
+  updateActiveLang, updateActiveLocale, clearDraft, setDraft, profilesByMobile, MAX_PER_MOBILE,
 } from "@/lib/user-store";
+import { COUNTRIES, getCountry } from "@/lib/countries";
 
 export const Route = createFileRoute("/settings")({
   component: SettingsPage,
@@ -101,13 +102,17 @@ function SettingsPage() {
           )}
         </section>
 
+        {/* Country / region */}
+        <CountrySection user={user} />
+
         {/* Profile details */}
         <section className="rounded-3xl bg-card border border-border p-5 shadow-card">
           <div className="text-xs uppercase tracking-widest text-muted-foreground font-semibold mb-3">{dict.profileDetails}</div>
-          <Row label={dict.mobile} value={`+91 ${user.mobile}`} />
+          <Row label={dict.mobile} value={`${getCountry(user.country).dialPrefix} ${user.mobile}`} />
           <Row label="Name" value={user.name} locked lockedLabel={dict.cannotEdit} />
           <Row label={dict.dob} value={user.dob ?? "—"} locked lockedLabel={dict.cannotEdit} />
           <Row label={dict.gender} value={dict[user.gender ?? "other"]} locked lockedLabel={dict.cannotEdit} />
+          <Row label="Country" value={`${getCountry(user.country).flag} ${getCountry(user.country).name} (${getCountry(user.country).dialPrefix})`} />
         </section>
 
         {/* Switch profiles */}
@@ -115,7 +120,7 @@ function SettingsPage() {
           <div className="flex items-center justify-between mb-3">
             <div className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">{dict.switchProfile}</div>
             <div className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
-              <Phone className="size-3" /> +91 {user.mobile} · {sameMobile.length}/{MAX_PER_MOBILE}
+              <Phone className="size-3" /> {getCountry(user.country).dialPrefix} {user.mobile} · {sameMobile.length}/{MAX_PER_MOBILE}
             </div>
           </div>
           <div className="space-y-2">
@@ -169,7 +174,7 @@ function SettingsPage() {
                   </div>
                   <div className="flex-1">
                     <div className="font-semibold">{p.name}</div>
-                    <div className="text-xs text-muted-foreground">+91 {p.mobile}</div>
+                    <div className="text-xs text-muted-foreground">{getCountry(p.country).dialPrefix} {p.mobile}</div>
                   </div>
                 </button>
               ))}
@@ -189,10 +194,66 @@ function Row({ label, value, locked, lockedLabel }: { label: string; value: stri
   return (
     <div className="flex items-center justify-between py-2 border-b border-border/50 last:border-0">
       <span className="text-sm text-muted-foreground">{label}</span>
-      <span className="text-sm font-semibold inline-flex items-center gap-2">
+      <span className="text-sm font-semibold inline-flex items-center gap-2 text-right">
         {value}
         {locked && <Lock className="size-3 text-muted-foreground" aria-label={lockedLabel} />}
       </span>
     </div>
+  );
+}
+
+function CountrySection({ user }: { user: { country: string; pincode: string | null } }) {
+  const [code, setCode] = useState(user.country);
+  const [pin, setPin] = useState(user.pincode ?? "");
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState<string | null>(null);
+  const country = getCountry(code);
+
+  async function save() {
+    setBusy(true); setMsg(null);
+    const trimmed = pin.trim();
+    if (trimmed && country.pincodeRegex && !country.pincodeRegex.test(trimmed)) {
+      setBusy(false);
+      return setMsg(`Invalid ${country.name} postal code.`);
+    }
+    const res = await updateActiveLocale({ country: code, pincode: trimmed || null });
+    setBusy(false);
+    setMsg(res?.error ? `Error: ${res.error}` : "Saved");
+    setTimeout(() => setMsg(null), 2500);
+  }
+
+  return (
+    <section className="rounded-3xl bg-card border border-border p-5 shadow-card">
+      <div className="flex items-center gap-3 mb-3">
+        <div className="size-10 rounded-full bg-muted grid place-items-center">
+          <MapPin className="size-5 text-muted-foreground" />
+        </div>
+        <div className="flex-1">
+          <div className="font-semibold">Country & region</div>
+          <div className="text-xs text-muted-foreground">{country.flag} {country.name} · {country.dialPrefix}</div>
+        </div>
+      </div>
+      <select
+        value={code}
+        onChange={(e) => setCode(e.target.value)}
+        className="w-full rounded-2xl bg-muted border border-border focus:border-primary px-4 py-2.5 text-sm outline-none mb-2"
+      >
+        {COUNTRIES.map((c) => (
+          <option key={c.code} value={c.code}>{c.flag} {c.name} ({c.dialPrefix})</option>
+        ))}
+      </select>
+      <input
+        value={pin}
+        onChange={(e) => setPin(e.target.value.replace(/[^a-zA-Z0-9 -]/g, "").slice(0, 12))}
+        placeholder={country.pincodePlaceholder ?? country.pincodeLabel}
+        className="w-full rounded-2xl bg-muted border border-border focus:border-primary px-4 py-2.5 text-sm outline-none tracking-wider"
+      />
+      <div className="mt-3 flex items-center justify-between gap-3">
+        <span className={`text-xs ${msg?.startsWith("Error") ? "text-destructive" : "text-emerald-600"}`}>{msg}</span>
+        <button onClick={save} disabled={busy} className="inline-flex items-center gap-1.5 rounded-full bg-gradient-primary px-4 py-2 text-xs font-semibold text-primary-foreground shadow-glow disabled:opacity-50">
+          <Save className="size-3.5" /> {busy ? "Saving…" : "Save"}
+        </button>
+      </div>
+    </section>
   );
 }

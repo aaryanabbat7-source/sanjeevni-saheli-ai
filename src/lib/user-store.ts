@@ -13,6 +13,7 @@ export interface UserProfile {
   lang: Lang;
   country: string;
   pincode: string | null;
+  description: string | null;
   createdAt: number;
 }
 
@@ -62,7 +63,7 @@ function mobileToEmail(mobile: string) {
 function rowToProfile(r: {
   id: string; mobile: string; name: string; dob: string | null;
   gender: string | null; lang: string; created_at: string;
-  country?: string | null; pincode?: string | null;
+  country?: string | null; pincode?: string | null; description?: string | null;
 }): UserProfile {
   return {
     id: r.id,
@@ -73,6 +74,7 @@ function rowToProfile(r: {
     lang: (r.lang as Lang) ?? "en",
     country: r.country ?? "IN",
     pincode: r.pincode ?? null,
+    description: r.description ?? null,
     createdAt: new Date(r.created_at).getTime(),
   };
 }
@@ -94,6 +96,29 @@ export async function fetchProfiles() {
     saveActive(activeId);
   }
   set({ profiles, activeId, loading: false, hydrated: true });
+  subscribeProfilesRealtime();
+}
+
+let profilesSub: { unsubscribe: () => void } | null = null;
+function subscribeProfilesRealtime() {
+  if (profilesSub || typeof window === "undefined") return;
+  const channel = supabase
+    .channel("sanjeevni-profiles")
+    .on("postgres_changes", { event: "*", schema: "public", table: "profiles" }, () => {
+      void fetchProfilesQuiet();
+    })
+    .subscribe();
+  profilesSub = { unsubscribe: () => { void supabase.removeChannel(channel); profilesSub = null; } };
+}
+
+async function fetchProfilesQuiet() {
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("*")
+    .order("created_at", { ascending: true });
+  if (error || !data) return;
+  const profiles = data.map(rowToProfile);
+  set({ profiles });
 }
 
 export function clearProfiles() {
@@ -219,12 +244,13 @@ export async function commitDraft(): Promise<UserProfile | { error: string }> {
       lang: d.lang,
       country: d.country ?? "IN",
       pincode: d.pincode ?? null,
+      description: d.description ?? null,
     })
     .select("*")
     .single();
   if (error) {
     const msg = error.message?.includes("Minimum age")
-      ? "Minimum age allowed is 9 years."
+      ? "Minimum age allowed is 12 years."
       : error.message?.includes("Only 3")
       ? `Only ${MAX_PER_MOBILE} profiles allowed per mobile number.`
       : error.message;
@@ -239,6 +265,25 @@ export async function commitDraft(): Promise<UserProfile | { error: string }> {
   saveActive(profile.id);
   saveDraft({});
   return profile;
+}
+
+// Update country + pincode + description for the active profile
+export async function updateActiveLocale(patch: { country?: string; pincode?: string | null; description?: string | null }) {
+  const activeId = state.activeId;
+  if (!activeId) return { error: "No active profile." };
+  const { data: sess } = await supabase.auth.getUser();
+  if (!sess.user) return { error: "Not signed in." };
+  // optimistic
+  set({
+    profiles: state.profiles.map((p) => (p.id === activeId ? { ...p, ...patch } as UserProfile : p)),
+  });
+  const { error } = await supabase
+    .from("profiles")
+    .update(patch)
+    .eq("id", activeId)
+    .eq("user_id", sess.user.id);
+  if (error) { await fetchProfiles(); return { error: error.message }; }
+  return {};
 }
 
 // Legacy helper kept for routes that ask by mobile (always = current authed mobile)

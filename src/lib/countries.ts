@@ -1,27 +1,30 @@
-export type CountryCode = "IN" | "BD" | "NP" | "BT" | "KE" | "NG" | "UG";
+export type CountryCode = "IN" | "BD" | "NP" | "BT" | "KE" | "NG" | "UG" | "NE" | "TD";
 
 export interface CountryInfo {
   code: CountryCode;
   name: string;
   flag: string;
   dialPrefix: string;
+  mobileLengths: number[]; // allowed digit counts (excluding country prefix)
   mobileRegex: RegExp;
-  mobileLength: number;
   pincodeLabel: string;
+  pincodeRegex?: RegExp;
+  pincodePlaceholder?: string;
   emergency: {
     ambulance?: { number: string; label: string };
     health?: { number: string; label: string };
     women?: { number: string; label: string };
     universal?: { number: string; label: string };
   };
-  schemesScope: string; // free-text passed to the AI to scope answers
+  schemesScope: string;
 }
 
 export const COUNTRIES: CountryInfo[] = [
   {
     code: "IN", name: "India", flag: "🇮🇳", dialPrefix: "+91",
-    mobileRegex: /^[6-9]\d{9}$/, mobileLength: 10,
+    mobileLengths: [10], mobileRegex: /^[6-9]\d{9}$/,
     pincodeLabel: "PIN code (optional)",
+    pincodeRegex: /^\d{6}$/, pincodePlaceholder: "6-digit PIN (e.g. 110001)",
     emergency: {
       ambulance: { number: "108", label: "Ambulance" },
       health: { number: "104", label: "Health helpline" },
@@ -31,8 +34,9 @@ export const COUNTRIES: CountryInfo[] = [
   },
   {
     code: "BD", name: "Bangladesh", flag: "🇧🇩", dialPrefix: "+880",
-    mobileRegex: /^[1]\d{9}$/, mobileLength: 10,
+    mobileLengths: [10, 11], mobileRegex: /^0?1\d{9}$/,
     pincodeLabel: "Postal code (optional)",
+    pincodeRegex: /^\d{4}$/, pincodePlaceholder: "4-digit postal code",
     emergency: {
       universal: { number: "999", label: "Emergency 999" },
       women: { number: "109", label: "Women & Child" },
@@ -41,8 +45,9 @@ export const COUNTRIES: CountryInfo[] = [
   },
   {
     code: "NP", name: "Nepal", flag: "🇳🇵", dialPrefix: "+977",
-    mobileRegex: /^9\d{9}$/, mobileLength: 10,
+    mobileLengths: [10], mobileRegex: /^9\d{9}$/,
     pincodeLabel: "Postal code (optional)",
+    pincodeRegex: /^\d{5}$/, pincodePlaceholder: "5-digit postal code",
     emergency: {
       ambulance: { number: "102", label: "Ambulance" },
       universal: { number: "100", label: "Police 100" },
@@ -52,8 +57,9 @@ export const COUNTRIES: CountryInfo[] = [
   },
   {
     code: "BT", name: "Bhutan", flag: "🇧🇹", dialPrefix: "+975",
-    mobileRegex: /^[12]\d{7}$/, mobileLength: 8,
+    mobileLengths: [8], mobileRegex: /^[12]\d{7}$/,
     pincodeLabel: "Postal code (optional)",
+    pincodeRegex: /^\d{5}$/, pincodePlaceholder: "5-digit postal code",
     emergency: {
       universal: { number: "112", label: "Emergency 112" },
       ambulance: { number: "112", label: "Ambulance" },
@@ -62,8 +68,9 @@ export const COUNTRIES: CountryInfo[] = [
   },
   {
     code: "KE", name: "Kenya", flag: "🇰🇪", dialPrefix: "+254",
-    mobileRegex: /^[17]\d{8}$/, mobileLength: 9,
+    mobileLengths: [9], mobileRegex: /^[17]\d{8}$/,
     pincodeLabel: "Postal code (optional)",
+    pincodeRegex: /^\d{5}$/, pincodePlaceholder: "5-digit postal code",
     emergency: {
       universal: { number: "999", label: "Emergency 999" },
       ambulance: { number: "112", label: "Ambulance 112" },
@@ -73,8 +80,9 @@ export const COUNTRIES: CountryInfo[] = [
   },
   {
     code: "NG", name: "Nigeria", flag: "🇳🇬", dialPrefix: "+234",
-    mobileRegex: /^[789]\d{9}$/, mobileLength: 10,
+    mobileLengths: [10], mobileRegex: /^[789]\d{9}$/,
     pincodeLabel: "Postal code (optional)",
+    pincodeRegex: /^\d{6}$/, pincodePlaceholder: "6-digit postal code",
     emergency: {
       universal: { number: "112", label: "Emergency 112" },
       ambulance: { number: "112", label: "Ambulance" },
@@ -83,9 +91,32 @@ export const COUNTRIES: CountryInfo[] = [
     schemesScope: "Government of Nigeria (federal & state health/welfare programs)",
   },
   {
-    code: "UG", name: "Uganda", flag: "🇺🇬", dialPrefix: "+256",
-    mobileRegex: /^[7]\d{8}$/, mobileLength: 9,
+    code: "NE", name: "Niger", flag: "🇳🇪", dialPrefix: "+227",
+    mobileLengths: [8], mobileRegex: /^[89]\d{7}$/,
     pincodeLabel: "Postal code (optional)",
+    pincodeRegex: /^\d{4}$/, pincodePlaceholder: "4-digit postal code",
+    emergency: {
+      universal: { number: "15", label: "Emergency 15" },
+      ambulance: { number: "15", label: "Ambulance 15" },
+    },
+    schemesScope: "Government of Niger (national health & welfare programs)",
+  },
+  {
+    code: "TD", name: "Chad", flag: "🇹🇩", dialPrefix: "+235",
+    mobileLengths: [8], mobileRegex: /^[679]\d{7}$/,
+    pincodeLabel: "Postal code (optional)",
+    pincodePlaceholder: "Postal code",
+    emergency: {
+      universal: { number: "2251-4242", label: "Emergency" },
+      ambulance: { number: "2251-4242", label: "Ambulance" },
+    },
+    schemesScope: "Government of Chad (national health & welfare programs)",
+  },
+  {
+    code: "UG", name: "Uganda", flag: "🇺🇬", dialPrefix: "+256",
+    mobileLengths: [9], mobileRegex: /^[7]\d{8}$/,
+    pincodeLabel: "Postal code (optional)",
+    pincodePlaceholder: "Postal code",
     emergency: {
       universal: { number: "999", label: "Emergency 999" },
       ambulance: { number: "112", label: "Ambulance 112" },
@@ -97,4 +128,8 @@ export const COUNTRIES: CountryInfo[] = [
 
 export function getCountry(code: string | null | undefined): CountryInfo {
   return COUNTRIES.find((c) => c.code === code) ?? COUNTRIES[0];
+}
+
+export function maxMobileLength(c: CountryInfo): number {
+  return Math.max(...c.mobileLengths);
 }

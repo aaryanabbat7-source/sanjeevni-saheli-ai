@@ -1,4 +1,7 @@
-export type Lang = "en" | "hi" | "bn" | "or" | "pa" | "gu" | "mr" | "ta" | "te";
+export type Lang =
+  | "en" | "hi" | "bn" | "or" | "pa" | "gu" | "mr" | "ta" | "te"
+  | "ml" | "kn"                             // 2 more Indian regional
+  | "dz" | "ne" | "sw" | "ha" | "ar" | "lg"; // partner countries
 
 export const LANGUAGES: { code: Lang; native: string; english: string; flag: string }[] = [
   { code: "en", native: "English", english: "English", flag: "🇬🇧" },
@@ -10,17 +13,29 @@ export const LANGUAGES: { code: Lang; native: string; english: string; flag: str
   { code: "mr", native: "मराठी", english: "Marathi", flag: "🇮🇳" },
   { code: "ta", native: "தமிழ்", english: "Tamil", flag: "🇮🇳" },
   { code: "te", native: "తెలుగు", english: "Telugu", flag: "🇮🇳" },
+  { code: "ml", native: "മലയാളം", english: "Malayalam", flag: "🇮🇳" },
+  { code: "kn", native: "ಕನ್ನಡ", english: "Kannada", flag: "🇮🇳" },
+  { code: "dz", native: "རྫོང་ཁ", english: "Dzongkha", flag: "🇧🇹" },
+  { code: "ne", native: "नेपाली", english: "Nepali", flag: "🇳🇵" },
+  { code: "sw", native: "Kiswahili", english: "Swahili", flag: "🇰🇪" },
+  { code: "ha", native: "Hausa", english: "Hausa", flag: "🇳🇬" },
+  { code: "ar", native: "العربية التشادية", english: "Chadian Arabic", flag: "🇹🇩" },
+  { code: "lg", native: "Luganda", english: "Luganda", flag: "🇺🇬" },
 ];
 
 export const LANG_NAME: Record<Lang, string> = {
   en: "English", hi: "Hindi", bn: "Bengali", or: "Odia",
   pa: "Punjabi", gu: "Gujarati", mr: "Marathi", ta: "Tamil", te: "Telugu",
+  ml: "Malayalam", kn: "Kannada",
+  dz: "Dzongkha", ne: "Nepali", sw: "Swahili", ha: "Hausa", ar: "Chadian Arabic", lg: "Luganda",
 };
 
 export function bcp47(lang: Lang): string {
   const map: Record<Lang, string> = {
     en: "en-IN", hi: "hi-IN", bn: "bn-IN", or: "or-IN",
     pa: "pa-IN", gu: "gu-IN", mr: "mr-IN", ta: "ta-IN", te: "te-IN",
+    ml: "ml-IN", kn: "kn-IN",
+    dz: "dz-BT", ne: "ne-NP", sw: "sw-KE", ha: "ha-NG", ar: "ar", lg: "lg-UG",
   };
   return map[lang];
 }
@@ -618,6 +633,10 @@ const or: Dict = {
   deleteChat: "ବାର୍ତ୍ତାଳାପ ହଟାନ୍ତୁ",
 };
 
-export const t: Record<Lang, Dict> = { en, hi, bn, or, pa: en, gu: en, mr: en, ta: en, te: en };
+export const t: Record<Lang, Dict> = {
+  en, hi, bn, or,
+  pa: en, gu: en, mr: en, ta: en, te: en, ml: en, kn: en,
+  dz: en, ne: en, sw: en, ha: en, ar: en, lg: en,
+};
 export type { Dict };
 

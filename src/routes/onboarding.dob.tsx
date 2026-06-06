@@ -24,11 +24,11 @@ function DobPage() {
     const d = new Date(dob);
     const now = new Date();
     if (isNaN(d.getTime()) || d > now || d.getFullYear() < 1900) return setError(dict.dobInvalid);
-    // Enforce minimum age of 9 years
+    // Enforce minimum age of 12 years
     let age = now.getFullYear() - d.getFullYear();
     const m = now.getMonth() - d.getMonth();
     if (m < 0 || (m === 0 && now.getDate() < d.getDate())) age--;
-    if (age < 9) return setError("Minimum age allowed is 9 years.");
+    if (age < 12) return setError("Minimum age allowed is 12 years.");
     setDraft({ dob });
     nav({ to: "/onboarding/gender" });
   }

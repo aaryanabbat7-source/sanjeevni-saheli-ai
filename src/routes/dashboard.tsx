@@ -1,13 +1,14 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { useEffect } from "react";
-import { ArrowRight, MessageCircle, Globe, Settings, List } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ArrowRight, MessageCircle, Globe, Settings, List, MapPin, X, Save } from "lucide-react";
 import { PageShell, Disclaimer } from "@/components/PageShell";
 import { EmergencyBar } from "@/components/EmergencyBar";
 import { Logo } from "@/components/Logo";
 import { t } from "@/lib/i18n";
-import { useUser, useAuthReady, useHasSession } from "@/lib/user-store";
+import { useUser, useAuthReady, useHasSession, updateActiveLocale } from "@/lib/user-store";
 import { TOPICS } from "@/lib/topics";
+import { COUNTRIES, getCountry } from "@/lib/countries";
 
 export const Route = createFileRoute("/dashboard")({
   component: Dashboard,
@@ -52,6 +53,9 @@ function Dashboard() {
           <h1 className="text-3xl md:text-4xl font-bold">{user.name} 💖</h1>
           <p className="mt-2 text-muted-foreground">{dict.dashboardSub}</p>
         </motion.div>
+
+        <LocationPrompt user={user} />
+
 
         <div className="mt-6 grid sm:grid-cols-[1fr_auto] gap-3 items-stretch">
           <Link to="/chat" className="block rounded-3xl p-1 bg-gradient-primary shadow-glow hover:shadow-soft transition hover:scale-[1.01]">
@@ -126,5 +130,66 @@ function Dashboard() {
         <Disclaimer text={dict.disclaimer} />
       </div>
     </PageShell>
+  );
+}
+
+const DISMISS_KEY = "sanjeevni.locale-prompt-dismissed.v1";
+
+function LocationPrompt({ user }: { user: { id: string; country: string; pincode: string | null } }) {
+  const [dismissed, setDismissed] = useState<boolean>(() => {
+    if (typeof window === "undefined") return true;
+    try { return window.localStorage.getItem(`${DISMISS_KEY}.${user.id}`) === "1"; } catch { return false; }
+  });
+  const [code, setCode] = useState(user.country);
+  const [pin, setPin] = useState(user.pincode ?? "");
+  const [busy, setBusy] = useState(false);
+  const country = getCountry(code);
+
+  // Show only if user hasn't entered a pincode yet AND hasn't dismissed
+  if (dismissed || user.pincode) return null;
+
+  function close() {
+    try { window.localStorage.setItem(`${DISMISS_KEY}.${user.id}`, "1"); } catch {}
+    setDismissed(true);
+  }
+  async function save() {
+    setBusy(true);
+    const trimmed = pin.trim();
+    if (trimmed && country.pincodeRegex && !country.pincodeRegex.test(trimmed)) {
+      setBusy(false);
+      alert(`Please enter a valid ${country.name} postal code.`);
+      return;
+    }
+    await updateActiveLocale({ country: code, pincode: trimmed || null });
+    setBusy(false);
+    close();
+  }
+
+  return (
+    <div className="mt-6 rounded-3xl border-2 border-primary/30 bg-gradient-soft p-5 shadow-card relative">
+      <button onClick={close} aria-label="Dismiss" className="absolute top-3 right-3 size-8 grid place-items-center rounded-full hover:bg-muted text-muted-foreground">
+        <X className="size-4" />
+      </button>
+      <div className="flex items-start gap-3">
+        <div className="size-10 rounded-full bg-gradient-primary grid place-items-center text-primary-foreground shadow-glow shrink-0">
+          <MapPin className="size-5" />
+        </div>
+        <div className="flex-1">
+          <div className="font-semibold text-sm">Help us localize your guidance</div>
+          <p className="text-xs text-muted-foreground mt-0.5">Confirm your country and (optional) postal code for accurate schemes and emergency numbers.</p>
+        </div>
+      </div>
+      <div className="mt-3 grid sm:grid-cols-[1fr_1fr_auto] gap-2">
+        <select value={code} onChange={(e) => setCode(e.target.value)} className="rounded-xl bg-card border border-border px-3 py-2 text-sm">
+          {COUNTRIES.map((c) => (<option key={c.code} value={c.code}>{c.flag} {c.name}</option>))}
+        </select>
+        <input value={pin} onChange={(e) => setPin(e.target.value.replace(/[^a-zA-Z0-9 -]/g, "").slice(0, 12))}
+          placeholder={country.pincodePlaceholder ?? "Postal code (optional)"}
+          className="rounded-xl bg-card border border-border px-3 py-2 text-sm tracking-wider" />
+        <button onClick={save} disabled={busy} className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-gradient-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-glow disabled:opacity-50">
+          <Save className="size-3.5" /> {busy ? "Saving…" : "Save"}
+        </button>
+      </div>
+    </div>
   );
 }

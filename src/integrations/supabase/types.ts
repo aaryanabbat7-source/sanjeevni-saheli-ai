@@ -124,6 +124,7 @@ export type Database = {
         Row: {
           country: string
           created_at: string
+          description: string | null
           dob: string
           gender: string
           id: string
@@ -136,6 +137,7 @@ export type Database = {
         Insert: {
           country?: string
           created_at?: string
+          description?: string | null
           dob: string
           gender: string
           id?: string
@@ -148,6 +150,7 @@ export type Database = {
         Update: {
           country?: string
           created_at?: string
+          description?: string | null
           dob?: string
           gender?: string
           id?: string

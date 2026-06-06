@@ -54,7 +54,7 @@ function Landing() {
                 <LogIn className="size-4" /> {dict.login}
               </Link>
               <Link
-                to="/onboarding/language"
+                to="/onboarding/country"
                 onClick={() => clearDraft()}
                 className="inline-flex items-center gap-1.5 rounded-full bg-gradient-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-glow hover:scale-[1.03] transition"
               >
@@ -90,7 +90,7 @@ function Landing() {
             ) : (
               <>
                 <Link
-                  to="/onboarding/language"
+                  to="/onboarding/country"
                   onClick={() => clearDraft()}
                   className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-6 py-3 font-semibold text-primary-foreground shadow-glow hover:shadow-soft transition hover:scale-[1.02]"
                 >
@@ -258,7 +258,7 @@ function Landing() {
             </p>
           </div>
           <Link
-            to={loggedIn ? "/dashboard" : "/onboarding/language"}
+            to={loggedIn ? "/dashboard" : "/onboarding/country"}
             onClick={() => { if (!loggedIn) clearDraft(); }}
             className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-5 py-3 font-semibold text-primary-foreground shadow-glow whitespace-nowrap"
           >

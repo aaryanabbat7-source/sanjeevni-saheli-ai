@@ -4,7 +4,7 @@ import { ArrowRight, ArrowLeft, Check, Lock } from "lucide-react";
 import { useState } from "react";
 import { PageShell } from "@/components/PageShell";
 import { t } from "@/lib/i18n";
-import { setDraft, useDraft, commitDraft } from "@/lib/user-store";
+import { setDraft, useDraft } from "@/lib/user-store";
 import type { Gender } from "@/lib/user-store";
 
 export const Route = createFileRoute("/onboarding/gender")({
@@ -28,10 +28,9 @@ function GenderPage() {
   async function finish() {
     if (!draft.gender) return;
     setBusy(true);
-    const res = await commitDraft();
+    // Save gender into draft (already done) and advance to description step
     setBusy(false);
-    if ("error" in res) { setError(res.error); return; }
-    nav({ to: "/dashboard" });
+    nav({ to: "/onboarding/description" });
   }
 
   return (

@@ -7,10 +7,14 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
+import { useEffect } from "react";
 
 import appCss from "../styles.css?url";
 import { LogoStacked } from "@/components/Logo";
 import { SplashIntro } from "@/components/SplashIntro";
+import { useUser } from "@/lib/user-store";
+import { bcp47, isRTL } from "@/lib/i18n";
+
 
 function NotFoundComponent() {
   return (
@@ -102,19 +106,7 @@ function RootComponent() {
         supabase.auth.onAuthStateChange((_e, s) => { if (s) void fetchAllThreads(); else clearChats(); });
       });
     });
-    // Sync <html lang>/<dir> with the active user's language for global i18n + RTL
-    import("@/lib/user-store").then(({ useStore }) => {
-      import("@/lib/i18n").then(({ isRTL, bcp47 }) => {
-        const apply = () => {
-          const s = useStore.length ? null : null; // placeholder to satisfy import
-          const state = (window as unknown as { __sanjeevniLang?: string }).__sanjeevniLang;
-          void s; void state;
-        };
-        apply();
-      });
-    });
   }
-  // Subscribe to user store inline so <html lang/dir> reflects active profile
   return (
     <QueryClientProvider client={queryClient}>
       <HtmlLangSync />
@@ -124,9 +116,15 @@ function RootComponent() {
   );
 }
 
+/** Mirrors active user's language to <html lang> + dir for global i18n & RTL. */
 function HtmlLangSync() {
-  // Lightweight effect: read active user lang and apply to <html>.
-  // Hooks have to be called inside a component, so we keep this tiny.
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  return <HtmlLangSyncInner />;
+  const user = useUser();
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const lang = user?.lang ?? "en";
+    document.documentElement.lang = bcp47(lang);
+    document.documentElement.dir = isRTL(lang) ? "rtl" : "ltr";
+  }, [user?.lang]);
+  return null;
 }
+

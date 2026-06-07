@@ -5,8 +5,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-sans: "Nunito", "Poppins", "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Poppins", "Nunito", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Lato", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Playfair Display", "Lato", ui-serif, Georgia, serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -46,63 +46,66 @@
 :root {
   --radius: 1.25rem;
 
-  /* Brand — VIBRANT young gender-neutral wellness: coral + teal + sunshine on warm cream */
-  --background: oklch(0.985 0.014 75);
-  --foreground: oklch(0.22 0.04 250);
+  /* Brand Kit — Sage / Terracotta / Warm Ivory / Earth Brown / Moss */
+  /* Warm Ivory #F2E9DF */
+  --background: oklch(0.945 0.018 75);
+  /* Earth Brown #5B4A3B */
+  --foreground: oklch(0.36 0.028 60);
 
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.22 0.04 250);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.22 0.04 250);
+  --card: oklch(0.985 0.008 75);
+  --card-foreground: oklch(0.36 0.028 60);
+  --popover: oklch(0.985 0.008 75);
+  --popover-foreground: oklch(0.36 0.028 60);
 
-  /* Primary: vivid coral-orange — energetic and gender-neutral */
-  --primary: oklch(0.68 0.24 32);
-  --primary-foreground: oklch(0.99 0.005 60);
-  --primary-glow: oklch(0.82 0.21 50);
+  /* Primary: Sage Green #6E7D5A */
+  --primary: oklch(0.535 0.052 122);
+  --primary-foreground: oklch(0.98 0.012 75);
+  --primary-glow: oklch(0.70 0.060 122);
 
-  /* Secondary: vivid teal — fresh, modern, friendly */
-  --secondary: oklch(0.62 0.16 195);
-  --secondary-foreground: oklch(0.99 0.005 60);
+  /* Secondary: Terracotta #C68C7A → use C68C7A from kit (warm coral-brown) */
+  --secondary: oklch(0.67 0.075 38);
+  --secondary-foreground: oklch(0.98 0.012 75);
 
-  --muted: oklch(0.96 0.018 75);
-  --muted-foreground: oklch(0.48 0.03 250);
+  --muted: oklch(0.92 0.018 75);
+  --muted-foreground: oklch(0.48 0.028 60);
 
-  --accent: oklch(0.82 0.20 85);   /* sunshine gold */
-  --accent-foreground: oklch(0.25 0.06 60);
+  /* Accent: Moss Green #A8B69A */
+  --accent: oklch(0.75 0.045 125);
+  --accent-foreground: oklch(0.30 0.028 60);
 
-  --destructive: oklch(0.6 0.24 25);
+  --destructive: oklch(0.58 0.20 27);
   --destructive-foreground: oklch(0.99 0 0);
 
-  --border: oklch(0.9 0.025 75);
-  --input: oklch(0.94 0.022 75);
-  --ring: oklch(0.68 0.24 32);
+  --border: oklch(0.86 0.022 75);
+  --input: oklch(0.93 0.018 75);
+  --ring: oklch(0.535 0.052 122);
 
-  /* Category colors */
-  --menstrual: oklch(0.68 0.22 350);
-  --nutrition: oklch(0.64 0.20 150);
-  --vaccine: oklch(0.60 0.20 240);
-  --emergency: oklch(0.62 0.26 25);
-  --pregnancy: oklch(0.60 0.22 300);
-  --schemes: oklch(0.72 0.20 70);
+  /* Category colors — tuned to brand palette */
+  --menstrual: oklch(0.67 0.075 38);     /* terracotta */
+  --nutrition: oklch(0.535 0.052 122);   /* sage */
+  --vaccine: oklch(0.55 0.06 240);       /* calm blue */
+  --emergency: oklch(0.58 0.20 27);
+  --pregnancy: oklch(0.62 0.08 350);
+  --schemes: oklch(0.62 0.08 80);
 
-  /* Gradients — coral → teal → sunshine: vibrant and gender-neutral */
-  --gradient-primary: linear-gradient(135deg, oklch(0.76 0.22 35), oklch(0.62 0.18 200));
-  --gradient-soft: linear-gradient(180deg, oklch(0.99 0.014 75), oklch(0.94 0.05 60));
-  --gradient-hero: radial-gradient(ellipse at top right, oklch(0.85 0.18 40 / 0.55), transparent 60%),
-                   radial-gradient(ellipse at top left, oklch(0.86 0.16 200 / 0.45), transparent 55%),
-                   radial-gradient(ellipse at bottom left, oklch(0.86 0.18 85 / 0.45), transparent 60%),
-                   linear-gradient(180deg, oklch(0.99 0.014 75), oklch(0.97 0.03 60));
-  --gradient-menstrual: linear-gradient(135deg, oklch(0.80 0.18 350), oklch(0.62 0.24 340));
-  --gradient-nutrition: linear-gradient(135deg, oklch(0.78 0.20 150), oklch(0.52 0.18 165));
-  --gradient-vaccine: linear-gradient(135deg, oklch(0.76 0.18 240), oklch(0.52 0.20 245));
-  --gradient-emergency: linear-gradient(135deg, oklch(0.78 0.22 35), oklch(0.56 0.26 20));
-  --gradient-pregnancy: linear-gradient(135deg, oklch(0.78 0.20 310), oklch(0.56 0.22 295));
-  --gradient-schemes: linear-gradient(135deg, oklch(0.82 0.20 80), oklch(0.58 0.22 50));
+  /* Gradients — sage → terracotta → moss */
+  --gradient-primary: linear-gradient(135deg, oklch(0.535 0.052 122), oklch(0.67 0.075 38));
+  --gradient-soft: linear-gradient(180deg, oklch(0.97 0.012 75), oklch(0.92 0.022 75));
+  --gradient-hero: radial-gradient(ellipse at top right, oklch(0.75 0.045 125 / 0.45), transparent 60%),
+                   radial-gradient(ellipse at top left, oklch(0.78 0.06 38 / 0.35), transparent 55%),
+                   radial-gradient(ellipse at bottom left, oklch(0.70 0.04 122 / 0.30), transparent 60%),
+                   linear-gradient(180deg, oklch(0.97 0.014 75), oklch(0.93 0.022 75));
+  --gradient-menstrual: linear-gradient(135deg, oklch(0.74 0.075 38), oklch(0.56 0.090 30));
+  --gradient-nutrition: linear-gradient(135deg, oklch(0.66 0.060 125), oklch(0.50 0.058 122));
+  --gradient-vaccine: linear-gradient(135deg, oklch(0.70 0.06 240), oklch(0.50 0.080 245));
+  --gradient-emergency: linear-gradient(135deg, oklch(0.72 0.18 30), oklch(0.54 0.22 22));
+  --gradient-pregnancy: linear-gradient(135deg, oklch(0.74 0.08 350), oklch(0.56 0.10 340));
+  --gradient-schemes: linear-gradient(135deg, oklch(0.74 0.08 80), oklch(0.56 0.10 60));
 
-  /* Shadows */
-  --shadow-soft: 0 4px 24px -8px oklch(0.55 0.22 35 / 0.25);
-  --shadow-glow: 0 10px 44px -8px oklch(0.68 0.24 32 / 0.45);
-  --shadow-card: 0 2px 12px -4px oklch(0.4 0.06 250 / 0.08), 0 12px 32px -16px oklch(0.4 0.06 250 / 0.12);
+  /* Shadows — warm earthy */
+  --shadow-soft: 0 4px 24px -8px oklch(0.36 0.028 60 / 0.18);
+  --shadow-glow: 0 10px 44px -8px oklch(0.535 0.052 122 / 0.40);
+  --shadow-card: 0 2px 12px -4px oklch(0.36 0.028 60 / 0.08), 0 12px 32px -16px oklch(0.36 0.028 60 / 0.12);
 
   /* Transitions */
   --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -116,18 +119,27 @@
   html {
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    /* Smooth, native-feeling scroll across the app */
+    scroll-behavior: smooth;
   }
 
   body {
     background: var(--background);
     color: var(--color-foreground);
     min-height: 100dvh;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+    /* Mobile safe areas */
+    padding-bottom: env(safe-area-inset-bottom);
   }
 
   h1, h2, h3, h4 {
     font-family: var(--font-display);
     letter-spacing: -0.01em;
   }
+
+  /* RTL for Arabic / Urdu */
+  html[dir="rtl"] body { direction: rtl; }
 }
 
 @layer utilities {
@@ -136,12 +148,6 @@
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border: 1px solid color-mix(in oklab, white 60%, transparent);
-  }
-  .glass-pink {
-    background: color-mix(in oklab, oklch(0.95 0.04 340) 70%, transparent);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid color-mix(in oklab, oklch(0.85 0.1 340) 50%, transparent);
   }
   .bg-gradient-primary { background: var(--gradient-primary); }
   .bg-gradient-soft { background: var(--gradient-soft); }
@@ -161,6 +167,15 @@
     background-clip: text;
     color: transparent;
   }
+  /* Mobile-first sticky bottom action bar (respects iOS safe area) */
+  .sticky-action-bar {
+    position: sticky;
+    bottom: 0;
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+    background: linear-gradient(180deg, transparent, var(--background) 35%);
+  }
+  /* Perf: skip rendering off-screen list items */
+  .cv-auto { content-visibility: auto; contain-intrinsic-size: 1px 160px; }
 }
 
 @keyframes heartbeat {
@@ -177,15 +192,15 @@
 .animate-float { animation: float 5s ease-in-out infinite; }
 
 @keyframes pulse-ring {
-  0% { box-shadow: 0 0 0 0 oklch(0.62 0.24 350 / 0.5); }
-  70% { box-shadow: 0 0 0 18px oklch(0.62 0.24 350 / 0); }
-  100% { box-shadow: 0 0 0 0 oklch(0.62 0.24 350 / 0); }
+  0% { box-shadow: 0 0 0 0 oklch(0.535 0.052 122 / 0.5); }
+  70% { box-shadow: 0 0 0 18px oklch(0.535 0.052 122 / 0); }
+  100% { box-shadow: 0 0 0 0 oklch(0.535 0.052 122 / 0); }
 }
 .animate-pulse-ring { animation: pulse-ring 1.8s ease-out infinite; }
 
 @keyframes emergency-flash {
-  0%, 100% { border-color: oklch(0.58 0.24 25); box-shadow: 0 0 0 0 oklch(0.58 0.24 25 / 0.5); }
-  50% { border-color: oklch(0.7 0.26 25); box-shadow: 0 0 24px 4px oklch(0.58 0.24 25 / 0.35); }
+  0%, 100% { border-color: oklch(0.58 0.20 27); box-shadow: 0 0 0 0 oklch(0.58 0.20 27 / 0.5); }
+  50% { border-color: oklch(0.70 0.22 27); box-shadow: 0 0 24px 4px oklch(0.58 0.20 27 / 0.35); }
 }
 .animate-emergency { animation: emergency-flash 1.4s ease-in-out infinite; }
 

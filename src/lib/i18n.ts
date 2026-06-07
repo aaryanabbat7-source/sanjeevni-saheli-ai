@@ -1,7 +1,8 @@
 export type Lang =
   | "en" | "hi" | "bn" | "or" | "pa" | "gu" | "mr" | "ta" | "te"
-  | "ml" | "kn"                             // 2 more Indian regional
-  | "dz" | "ne" | "sw" | "ha" | "ar" | "lg"; // partner countries
+  | "ml" | "kn"
+  | "dz" | "ne" | "sw" | "ha" | "ar" | "lg"
+  | "ur" | "so" | "am"; // Urdu, Somali, Amharic
 
 export const LANGUAGES: { code: Lang; native: string; english: string; flag: string }[] = [
   { code: "en", native: "English", english: "English", flag: "🇬🇧" },
@@ -15,11 +16,14 @@ export const LANGUAGES: { code: Lang; native: string; english: string; flag: str
   { code: "te", native: "తెలుగు", english: "Telugu", flag: "🇮🇳" },
   { code: "ml", native: "മലയാളം", english: "Malayalam", flag: "🇮🇳" },
   { code: "kn", native: "ಕನ್ನಡ", english: "Kannada", flag: "🇮🇳" },
+  { code: "ur", native: "اردو", english: "Urdu", flag: "🇵🇰" },
+  { code: "ar", native: "العربية", english: "Arabic", flag: "🇸🇦" },
   { code: "dz", native: "རྫོང་ཁ", english: "Dzongkha", flag: "🇧🇹" },
   { code: "ne", native: "नेपाली", english: "Nepali", flag: "🇳🇵" },
   { code: "sw", native: "Kiswahili", english: "Swahili", flag: "🇰🇪" },
+  { code: "so", native: "Soomaali", english: "Somali", flag: "🇸🇴" },
+  { code: "am", native: "አማርኛ", english: "Amharic", flag: "🇪🇹" },
   { code: "ha", native: "Hausa", english: "Hausa", flag: "🇳🇬" },
-  { code: "ar", native: "العربية التشادية", english: "Chadian Arabic", flag: "🇹🇩" },
   { code: "lg", native: "Luganda", english: "Luganda", flag: "🇺🇬" },
 ];
 
@@ -27,17 +31,61 @@ export const LANG_NAME: Record<Lang, string> = {
   en: "English", hi: "Hindi", bn: "Bengali", or: "Odia",
   pa: "Punjabi", gu: "Gujarati", mr: "Marathi", ta: "Tamil", te: "Telugu",
   ml: "Malayalam", kn: "Kannada",
-  dz: "Dzongkha", ne: "Nepali", sw: "Swahili", ha: "Hausa", ar: "Chadian Arabic", lg: "Luganda",
+  dz: "Dzongkha", ne: "Nepali", sw: "Swahili", ha: "Hausa", ar: "Arabic", lg: "Luganda",
+  ur: "Urdu", so: "Somali", am: "Amharic",
 };
+
+/** Right-to-left scripts. */
+export const RTL_LANGS: ReadonlySet<Lang> = new Set<Lang>(["ar", "ur"]);
+export function isRTL(lang: Lang | string | null | undefined): boolean {
+  return !!lang && RTL_LANGS.has(lang as Lang);
+}
 
 export function bcp47(lang: Lang): string {
   const map: Record<Lang, string> = {
     en: "en-IN", hi: "hi-IN", bn: "bn-IN", or: "or-IN",
     pa: "pa-IN", gu: "gu-IN", mr: "mr-IN", ta: "ta-IN", te: "te-IN",
     ml: "ml-IN", kn: "kn-IN",
-    dz: "dz-BT", ne: "ne-NP", sw: "sw-KE", ha: "ha-NG", ar: "ar", lg: "lg-UG",
+    dz: "dz-BT", ne: "ne-NP", sw: "sw-KE", ha: "ha-NG", ar: "ar-SA", lg: "lg-UG",
+    ur: "ur-PK", so: "so-SO", am: "am-ET",
   };
   return map[lang];
+}
+
+/** Detect language from a piece of text by Unicode script ranges. Returns null when ambiguous (e.g. plain Latin). */
+export function detectLangFromText(text: string): Lang | null {
+  if (!text) return null;
+  if (/[\u0900-\u097F]/.test(text)) return "hi"; // Devanagari (covers hi/mr/ne; default hi)
+  if (/[\u0980-\u09FF]/.test(text)) return "bn"; // Bengali
+  if (/[\u0A00-\u0A7F]/.test(text)) return "pa"; // Gurmukhi
+  if (/[\u0A80-\u0AFF]/.test(text)) return "gu"; // Gujarati
+  if (/[\u0B00-\u0B7F]/.test(text)) return "or"; // Oriya
+  if (/[\u0B80-\u0BFF]/.test(text)) return "ta"; // Tamil
+  if (/[\u0C00-\u0C7F]/.test(text)) return "te"; // Telugu
+  if (/[\u0C80-\u0CFF]/.test(text)) return "kn"; // Kannada
+  if (/[\u0D00-\u0D7F]/.test(text)) return "ml"; // Malayalam
+  if (/[\u1200-\u137F]/.test(text)) return "am"; // Ethiopic
+  if (/[\u0F00-\u0FFF]/.test(text)) return "dz"; // Tibetan (Dzongkha)
+  if (/[\u0600-\u06FF\u0750-\u077F\uFB50-\uFDFF\uFE70-\uFEFF]/.test(text)) {
+    // Arabic script — Urdu often has ے ٹ ڈ ڑ ں
+    return /[\u0679\u0688\u0691\u06BA\u06D2]/.test(text) ? "ur" : "ar";
+  }
+  return null;
+}
+
+/** Strip emojis, pictographs and most decorative symbols so TTS doesn't read them aloud. */
+export function stripForTTS(input: string): string {
+  if (!input) return "";
+  return input
+    // Emoji + pictographs (Unicode 14)
+    .replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{1F1E6}-\u{1F1FF}\u{2300}-\u{23FF}\u{2B00}-\u{2BFF}]/gu, "")
+    // Variation selectors and ZWJ
+    .replace(/[\u200D\uFE0F]/g, "")
+    // Markdown headings/bullets/asterisks/backticks
+    .replace(/[#*_`~>]/g, "")
+    // Collapse whitespace
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 export type TopicKey = "menstrual" | "nutrition" | "pregnancy" | "vaccine" | "emergency" | "schemes";
@@ -637,6 +685,8 @@ export const t: Record<Lang, Dict> = {
   en, hi, bn, or,
   pa: en, gu: en, mr: en, ta: en, te: en, ml: en, kn: en,
   dz: en, ne: en, sw: en, ha: en, ar: en, lg: en,
+  ur: en, so: en, am: en,
 };
 export type { Dict };
+
 

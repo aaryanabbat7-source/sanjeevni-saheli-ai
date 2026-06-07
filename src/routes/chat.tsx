@@ -124,18 +124,42 @@ function ChatPage() {
     setInput("");
   }
 
+  function pickVoice(targetLang: string): SpeechSynthesisVoice | null {
+    const voices = window.speechSynthesis.getVoices();
+    if (!voices?.length) return null;
+    const base = targetLang.split("-")[0].toLowerCase();
+    // exact match first, then language-only match
+    return (
+      voices.find((v) => v.lang?.toLowerCase() === targetLang.toLowerCase()) ??
+      voices.find((v) => v.lang?.toLowerCase().startsWith(base + "-")) ??
+      voices.find((v) => v.lang?.toLowerCase() === base) ??
+      null
+    );
+  }
+
   function speak(id: string, text: string) {
     if (typeof window === "undefined" || !window.speechSynthesis) return;
     window.speechSynthesis.cancel();
     if (speakingId === id) { setSpeakingId(null); return; }
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = langCode;
-    u.rate = 0.95;
-    u.onend = () => setSpeakingId((s) => (s === id ? null : s));
-    u.onerror = () => setSpeakingId((s) => (s === id ? null : s));
-    window.speechSynthesis.speak(u);
-    setSpeakingId(id);
+    // Strip emoji, markdown decorations, icon glyphs before speaking
+    // and detect the message's actual script for language-correct voicing.
+    import("@/lib/i18n").then(({ stripForTTS, detectLangFromText, bcp47 }) => {
+      const clean = stripForTTS(text);
+      if (!clean) return;
+      const detected = detectLangFromText(clean);
+      const lang = detected ? bcp47(detected) : langCode;
+      const u = new SpeechSynthesisUtterance(clean);
+      u.lang = lang;
+      u.rate = 0.95;
+      const v = pickVoice(lang);
+      if (v) u.voice = v;
+      u.onend = () => setSpeakingId((s) => (s === id ? null : s));
+      u.onerror = () => setSpeakingId((s) => (s === id ? null : s));
+      window.speechSynthesis.speak(u);
+      setSpeakingId(id);
+    });
   }
+
 
   async function copy(id: string, text: string) {
     try {

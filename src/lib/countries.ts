@@ -1,4 +1,5 @@
-export type CountryCode = "IN" | "BD" | "NP" | "BT" | "KE" | "NG" | "UG" | "NE" | "TD";
+export type CountryCode = "IN" | "BD" | "NP" | "BT" | "KE" | "NG" | "UG" | "NE" | "TD" | "ET" | "SO" | "DJ";
+
 
 export interface CountryInfo {
   code: CountryCode;
@@ -123,6 +124,39 @@ export const COUNTRIES: CountryInfo[] = [
       women: { number: "116", label: "Child helpline" },
     },
     schemesScope: "Government of Uganda (national & district health/welfare programs)",
+  },
+  {
+    code: "ET", name: "Ethiopia", flag: "🇪🇹", dialPrefix: "+251",
+    mobileLengths: [9], mobileRegex: /^9\d{8}$/,
+    pincodeLabel: "Postal code (optional)",
+    pincodeRegex: /^\d{4}$/, pincodePlaceholder: "4-digit postal code",
+    emergency: {
+      ambulance: { number: "907", label: "Ambulance" },
+      universal: { number: "991", label: "Police 991" },
+    },
+    schemesScope: "Government of Ethiopia (federal & regional health/welfare programs)",
+  },
+  {
+    code: "SO", name: "Somalia", flag: "🇸🇴", dialPrefix: "+252",
+    mobileLengths: [8, 9], mobileRegex: /^[67]\d{7,8}$/,
+    pincodeLabel: "Postal code (optional)",
+    pincodePlaceholder: "Postal code (not required)",
+    emergency: {
+      universal: { number: "888", label: "Emergency" },
+      ambulance: { number: "999", label: "Ambulance" },
+    },
+    schemesScope: "Federal Government of Somalia (national health/welfare programs)",
+  },
+  {
+    code: "DJ", name: "Djibouti", flag: "🇩🇯", dialPrefix: "+253",
+    mobileLengths: [8], mobileRegex: /^77\d{6}$/,
+    pincodeLabel: "Postal code (optional)",
+    pincodePlaceholder: "Postal code (not required)",
+    emergency: {
+      universal: { number: "17", label: "Emergency 17" },
+      ambulance: { number: "351351", label: "Ambulance" },
+    },
+    schemesScope: "Government of Djibouti (national health/welfare programs)",
   },
 ];
 

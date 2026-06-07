@@ -1,8 +1,8 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
-import logoAsset from "@/assets/sanjeevni-logo-full.jpeg.asset.json";
+import markAsset from "@/assets/sanjeevni-mark.png.asset.json";
 
-const KEY = "sanjeevni.splash.v3";
+const KEY = "sanjeevni.splash.v4";
 
 export function SplashIntro() {
   const [show, setShow] = useState(false);
@@ -42,11 +42,11 @@ export function SplashIntro() {
             className="flex flex-col items-center gap-5"
           >
             <img
-              src={logoAsset.url}
+              src={markAsset.url}
               alt="Project Sanjeevni"
-              width={240}
-              height={240}
-              className="object-contain drop-shadow-[0_10px_36px_rgba(212,102,74,0.35)]"
+              width={220}
+              height={220}
+              className="object-contain drop-shadow-[0_10px_36px_oklch(0.535_0.052_122/0.35)]"
             />
             {phase === "loading" && (
               <motion.div

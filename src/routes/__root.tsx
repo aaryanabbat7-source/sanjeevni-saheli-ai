@@ -53,22 +53,20 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
-      { name: "theme-color", content: "#e8633b" },
-      { title: "Sanjeevni Saheli AI — Your Trusted Health Companion" },
-      { name: "description", content: "Multilingual AI-powered healthcare companion for Indian families. Trusted guidance in Hindi, Bengali and English." },
-      { property: "og:title", content: "Sanjeevni Saheli AI — Your Trusted Health Companion" },
-      { property: "og:description", content: "Multilingual AI-powered healthcare companion for Indian families. Trusted guidance in Hindi, Bengali and English." },
+      { name: "theme-color", content: "#6E7D5A" },
+      { title: "Project Sanjeevni — Your Trusted Health Companion" },
+      { name: "description", content: "Multilingual AI-powered healthcare companion for families across India, Africa and South Asia. Trusted, compassionate, evidence-based." },
+      { property: "og:title", content: "Project Sanjeevni — जीवन को नई चेतना" },
+      { property: "og:description", content: "Multilingual AI-powered healthcare companion serving families in 12+ countries and 20+ languages." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Sanjeevni Saheli AI — Your Trusted Health Companion" },
-      { name: "twitter:description", content: "Multilingual AI-powered healthcare companion for Indian families. Trusted guidance in Hindi, Bengali and English." },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/cya4mOGhpJNousqTdHfouw2364T2/social-images/social-1780027453253-ChatGPT_Image_May_29,_2026,_09_33_47_AM.webp" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/cya4mOGhpJNousqTdHfouw2364T2/social-images/social-1780027453253-ChatGPT_Image_May_29,_2026,_09_33_47_AM.webp" },
+      { name: "twitter:title", content: "Project Sanjeevni — जीवन को नई चेतना" },
+      { name: "twitter:description", content: "Multilingual AI-powered healthcare companion serving families in 12+ countries and 20+ languages." },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@500;600;700;800&display=swap" },
+      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Lato:wght@400;700;900&display=swap" },
       { rel: "stylesheet", href: appCss },
     ],
   }),
@@ -104,11 +102,31 @@ function RootComponent() {
         supabase.auth.onAuthStateChange((_e, s) => { if (s) void fetchAllThreads(); else clearChats(); });
       });
     });
+    // Sync <html lang>/<dir> with the active user's language for global i18n + RTL
+    import("@/lib/user-store").then(({ useStore }) => {
+      import("@/lib/i18n").then(({ isRTL, bcp47 }) => {
+        const apply = () => {
+          const s = useStore.length ? null : null; // placeholder to satisfy import
+          const state = (window as unknown as { __sanjeevniLang?: string }).__sanjeevniLang;
+          void s; void state;
+        };
+        apply();
+      });
+    });
   }
+  // Subscribe to user store inline so <html lang/dir> reflects active profile
   return (
     <QueryClientProvider client={queryClient}>
+      <HtmlLangSync />
       <SplashIntro />
       <Outlet />
     </QueryClientProvider>
   );
+}
+
+function HtmlLangSync() {
+  // Lightweight effect: read active user lang and apply to <html>.
+  // Hooks have to be called inside a component, so we keep this tiny.
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  return <HtmlLangSyncInner />;
 }

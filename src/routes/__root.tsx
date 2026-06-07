@@ -94,6 +94,17 @@ function RootShell({ children }: { children: React.ReactNode }) {
   );
 }
 
+function HtmlLangSync() {
+  const user = useUser();
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const lang = user?.lang ?? "en";
+    document.documentElement.lang = bcp47(lang);
+    document.documentElement.dir = isRTL(lang) ? "rtl" : "ltr";
+  }, [user?.lang]);
+  return null;
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   if (typeof window !== "undefined") {
@@ -116,15 +127,4 @@ function RootComponent() {
   );
 }
 
-/** Mirrors active user's language to <html lang> + dir for global i18n & RTL. */
-function HtmlLangSync() {
-  const user = useUser();
-  useEffect(() => {
-    if (typeof document === "undefined") return;
-    const lang = user?.lang ?? "en";
-    document.documentElement.lang = bcp47(lang);
-    document.documentElement.dir = isRTL(lang) ? "rtl" : "ltr";
-  }, [user?.lang]);
-  return null;
-}
 

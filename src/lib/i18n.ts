@@ -1,3 +1,5 @@
+import * as g from "./i18n.generated";
+
 export type Lang =
   | "en" | "hi" | "bn" | "or" | "pa" | "gu" | "mr" | "ta" | "te"
   | "ml" | "kn"

@@ -1,3 +1,5 @@
+import * as g from "./i18n.generated";
+
 export type Lang =
   | "en" | "hi" | "bn" | "or" | "pa" | "gu" | "mr" | "ta" | "te"
   | "ml" | "kn"
@@ -681,11 +683,13 @@ const or: Dict = {
   deleteChat: "ବାର୍ତ୍ତାଳାପ ହଟାନ୍ତୁ",
 };
 
+const m = (partial: Partial<Dict>): Dict => ({ ...en, ...partial });
+
 export const t: Record<Lang, Dict> = {
   en, hi, bn, or,
-  pa: en, gu: en, mr: en, ta: en, te: en, ml: en, kn: en,
-  dz: en, ne: en, sw: en, ha: en, ar: en, lg: en,
-  ur: en, so: en, am: en,
+  pa: m(g.pa), gu: m(g.gu), mr: m(g.mr), ta: m(g.ta), te: m(g.te), ml: m(g.ml), kn: m(g.kn),
+  dz: m(g.dz), ne: m(g.ne), sw: m(g.sw), ha: m(g.ha), ar: m(g.ar), lg: m(g.lg),
+  ur: m(g.ur), so: m(g.so), am: m(g.am),
 };
 export type { Dict };
 

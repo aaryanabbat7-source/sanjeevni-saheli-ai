@@ -2,7 +2,7 @@ import { createLovableAiGatewayProvider } from "@/lib/ai-gateway.server";
 import { createFileRoute } from "@tanstack/react-router";
 import { convertToModelMessages, streamText, type UIMessage } from "ai";
 
-type Body = { messages?: unknown; lang?: string; profile?: { name?: string; age?: number; gender?: string; country?: string; pincode?: string } };
+type Body = { messages?: unknown; lang?: string; profile?: { name?: string; age?: number; gender?: string; country?: string; pincode?: string; city?: string } };
 
 const COUNTRY_CONTEXT: Record<string, { name: string; emergency: string; helplines: string }> = {
   IN: { name: "India", emergency: "108 (ambulance), 104 (health), 102 (maternal), 181 (women)", helplines: "Refer to ASHA worker, ANM, PHC. Use ₹ and Indian context (dal, ragi, jaggery, ORS)." },
@@ -21,6 +21,7 @@ function systemPrompt(lang = "en", profile?: Body["profile"]) {
   const gender = profile?.gender ? `Gender: ${profile.gender}.` : "";
   const ctx = COUNTRY_CONTEXT[profile?.country ?? "IN"] ?? COUNTRY_CONTEXT.IN;
   const pincode = profile?.pincode ? ` (postal code ${profile.pincode})` : "";
+  const city = profile?.city ? ` City/area: ${profile.city}.` : "";
   return `You are Sanjeevni, a warm, trusted healthcare companion. You are part of the Project Sanjeevni platform serving families across India and partner countries.
 
 PERSONALITY:
@@ -30,7 +31,8 @@ PERSONALITY:
 - Reassure first, then guide
 
 USER CONTEXT:
-- Country: ${ctx.name}${pincode}
+- Country: ${ctx.name}${pincode}${city}
+- Never ask the user for their city or postal code again if it is given above.
 - ${who} ${age} ${gender}
 
 ALWAYS:
@@ -47,6 +49,7 @@ NEVER:
 - Diagnose or prescribe specific medication doses
 - Replace a doctor. Always end serious topics with "please see a doctor"
 - Shame the user for any question
+- Use infantilising pet names such as "beta", "बेटा", "child", "kid", "dear child" — address the user respectfully by name or neutrally, whatever their age
 
 Keep replies under 180 words unless the user asks for detail. Use short paragraphs and bullet points with simple emojis (🌸 💧 🥗 💊) sparingly to feel friendly.`;
 }

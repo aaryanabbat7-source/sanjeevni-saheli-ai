@@ -9,6 +9,7 @@ import {
   updateActiveLang, updateActiveLocale, clearDraft, setDraft, profilesByMobile, MAX_PER_MOBILE,
 } from "@/lib/user-store";
 import { COUNTRIES, getCountry } from "@/lib/countries";
+import { lookupPostal } from "@/lib/postal";
 
 export const Route = createFileRoute("/settings")({
   component: SettingsPage,
@@ -202,7 +203,7 @@ function Row({ label, value, locked, lockedLabel }: { label: string; value: stri
   );
 }
 
-function CountrySection({ user }: { user: { country: string; pincode: string | null } }) {
+function CountrySection({ user }: { user: { country: string; pincode: string | null; city: string | null } }) {
   const [code, setCode] = useState(user.country);
   const [pin, setPin] = useState(user.pincode ?? "");
   const [busy, setBusy] = useState(false);
@@ -212,13 +213,14 @@ function CountrySection({ user }: { user: { country: string; pincode: string | n
   async function save() {
     setBusy(true); setMsg(null);
     const trimmed = pin.trim();
-    if (trimmed && country.pincodeRegex && !country.pincodeRegex.test(trimmed)) {
+    const check = await lookupPostal(code, trimmed);
+    if (!check.ok) {
       setBusy(false);
-      return setMsg(`Invalid ${country.name} postal code.`);
+      return setMsg(`Error: ${check.error}`);
     }
-    const res = await updateActiveLocale({ country: code, pincode: trimmed || null });
+    const res = await updateActiveLocale({ country: code, pincode: trimmed || null, city: check.city ?? null });
     setBusy(false);
-    setMsg(res?.error ? `Error: ${res.error}` : "Saved");
+    setMsg(res?.error ? `Error: ${res.error}` : check.city ? `Saved · ${check.city}` : "Saved");
     setTimeout(() => setMsg(null), 2500);
   }
 
@@ -230,7 +232,7 @@ function CountrySection({ user }: { user: { country: string; pincode: string | n
         </div>
         <div className="flex-1">
           <div className="font-semibold">Country & region</div>
-          <div className="text-xs text-muted-foreground">{country.flag} {country.name} · {country.dialPrefix}</div>
+          <div className="text-xs text-muted-foreground">{country.flag} {country.name} · {country.dialPrefix}{user.city ? ` · ${user.city}` : ""}</div>
         </div>
       </div>
       <select

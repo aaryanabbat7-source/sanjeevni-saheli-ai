@@ -13,6 +13,7 @@ export interface UserProfile {
   lang: Lang;
   country: string;
   pincode: string | null;
+  city: string | null;
   description: string | null;
   createdAt: number;
 }
@@ -63,7 +64,7 @@ function mobileToEmail(mobile: string) {
 function rowToProfile(r: {
   id: string; mobile: string; name: string; dob: string | null;
   gender: string | null; lang: string; created_at: string;
-  country?: string | null; pincode?: string | null; description?: string | null;
+  country?: string | null; pincode?: string | null; city?: string | null; description?: string | null;
 }): UserProfile {
   return {
     id: r.id,
@@ -74,6 +75,7 @@ function rowToProfile(r: {
     lang: (r.lang as Lang) ?? "en",
     country: r.country ?? "IN",
     pincode: r.pincode ?? null,
+    city: r.city ?? null,
     description: r.description ?? null,
     createdAt: new Date(r.created_at).getTime(),
   };
@@ -81,9 +83,12 @@ function rowToProfile(r: {
 
 export async function fetchProfiles() {
   set({ loading: true });
+  const { data: sess } = await supabase.auth.getUser();
+  if (!sess.user) { set({ loading: false, hydrated: true }); return; }
   const { data, error } = await supabase
     .from("profiles")
     .select("*")
+    .eq("user_id", sess.user.id)
     .order("created_at", { ascending: true });
   if (error) {
     set({ loading: false, hydrated: true });
@@ -112,9 +117,12 @@ function subscribeProfilesRealtime() {
 }
 
 async function fetchProfilesQuiet() {
+  const { data: sess } = await supabase.auth.getUser();
+  if (!sess.user) return;
   const { data, error } = await supabase
     .from("profiles")
     .select("*")
+    .eq("user_id", sess.user.id)
     .order("created_at", { ascending: true });
   if (error || !data) return;
   const profiles = data.map(rowToProfile);
@@ -244,6 +252,7 @@ export async function commitDraft(): Promise<UserProfile | { error: string }> {
       lang: d.lang,
       country: d.country ?? "IN",
       pincode: d.pincode ?? null,
+      city: d.city ?? null,
       description: d.description ?? null,
     })
     .select("*")
@@ -268,7 +277,7 @@ export async function commitDraft(): Promise<UserProfile | { error: string }> {
 }
 
 // Update country + pincode + description for the active profile
-export async function updateActiveLocale(patch: { country?: string; pincode?: string | null; description?: string | null }) {
+export async function updateActiveLocale(patch: { country?: string; pincode?: string | null; city?: string | null; description?: string | null }) {
   const activeId = state.activeId;
   if (!activeId) return { error: "No active profile." };
   const { data: sess } = await supabase.auth.getUser();

@@ -20,19 +20,14 @@ function CountryPage() {
   const [code, setCode] = useState(draft.country ?? "IN");
   const [pincode, setPincode] = useState(draft.pincode ?? "");
   const [error, setError] = useState("");
-  const [city, setCity] = useState<string | null>(null);
-  const [checking, setChecking] = useState(false);
   const country = getCountry(code);
 
   async function submit(e?: React.FormEvent) {
     e?.preventDefault();
     const trimmed = pincode.trim();
     setError("");
-    setChecking(true);
     const res = await lookupPostal(code, trimmed);
-    setChecking(false);
-    if (!res.ok) { setCity(null); return setError(res.error ?? "Invalid postal code."); }
-    setCity(res.city ?? null);
+    if (!res.ok) return setError(res.error ?? "Invalid postal code.");
     setDraft({ country: code, pincode: trimmed || undefined, city: res.city ?? null });
     nav({ to: "/onboarding/language" });
   }

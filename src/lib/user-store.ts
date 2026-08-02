@@ -83,9 +83,12 @@ function rowToProfile(r: {
 
 export async function fetchProfiles() {
   set({ loading: true });
+  const { data: sess } = await supabase.auth.getUser();
+  if (!sess.user) { set({ loading: false, hydrated: true }); return; }
   const { data, error } = await supabase
     .from("profiles")
     .select("*")
+    .eq("user_id", sess.user.id)
     .order("created_at", { ascending: true });
   if (error) {
     set({ loading: false, hydrated: true });
@@ -114,9 +117,12 @@ function subscribeProfilesRealtime() {
 }
 
 async function fetchProfilesQuiet() {
+  const { data: sess } = await supabase.auth.getUser();
+  if (!sess.user) return;
   const { data, error } = await supabase
     .from("profiles")
     .select("*")
+    .eq("user_id", sess.user.id)
     .order("created_at", { ascending: true });
   if (error || !data) return;
   const profiles = data.map(rowToProfile);
@@ -246,6 +252,7 @@ export async function commitDraft(): Promise<UserProfile | { error: string }> {
       lang: d.lang,
       country: d.country ?? "IN",
       pincode: d.pincode ?? null,
+      city: d.city ?? null,
       description: d.description ?? null,
     })
     .select("*")

@@ -681,11 +681,13 @@ const or: Dict = {
   deleteChat: "ବାର୍ତ୍ତାଳାପ ହଟାନ୍ତୁ",
 };
 
+const m = (partial: Partial<Dict>): Dict => ({ ...en, ...partial });
+
 export const t: Record<Lang, Dict> = {
   en, hi, bn, or,
-  pa: g.pa, gu: g.gu, mr: g.mr, ta: g.ta, te: g.te, ml: g.ml, kn: g.kn,
-  dz: g.dz, ne: g.ne, sw: g.sw, ha: g.ha, ar: g.ar, lg: g.lg,
-  ur: g.ur, so: g.so, am: g.am,
+  pa: m(g.pa), gu: m(g.gu), mr: m(g.mr), ta: m(g.ta), te: m(g.te), ml: m(g.ml), kn: m(g.kn),
+  dz: m(g.dz), ne: m(g.ne), sw: m(g.sw), ha: m(g.ha), ar: m(g.ar), lg: m(g.lg),
+  ur: m(g.ur), so: m(g.so), am: m(g.am),
 };
 export type { Dict };
 

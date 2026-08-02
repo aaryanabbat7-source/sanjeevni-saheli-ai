@@ -2,7 +2,7 @@ import { createLovableAiGatewayProvider } from "@/lib/ai-gateway.server";
 import { createFileRoute } from "@tanstack/react-router";
 import { convertToModelMessages, streamText, type UIMessage } from "ai";
 
-type Body = { messages?: unknown; lang?: string; profile?: { name?: string; age?: number; gender?: string; country?: string; pincode?: string } };
+type Body = { messages?: unknown; lang?: string; profile?: { name?: string; age?: number; gender?: string; country?: string; pincode?: string; city?: string } };
 
 const COUNTRY_CONTEXT: Record<string, { name: string; emergency: string; helplines: string }> = {
   IN: { name: "India", emergency: "108 (ambulance), 104 (health), 102 (maternal), 181 (women)", helplines: "Refer to ASHA worker, ANM, PHC. Use ₹ and Indian context (dal, ragi, jaggery, ORS)." },

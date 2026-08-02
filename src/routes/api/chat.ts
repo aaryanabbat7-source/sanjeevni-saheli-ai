@@ -21,6 +21,7 @@ function systemPrompt(lang = "en", profile?: Body["profile"]) {
   const gender = profile?.gender ? `Gender: ${profile.gender}.` : "";
   const ctx = COUNTRY_CONTEXT[profile?.country ?? "IN"] ?? COUNTRY_CONTEXT.IN;
   const pincode = profile?.pincode ? ` (postal code ${profile.pincode})` : "";
+  const city = profile?.city ? ` City/area: ${profile.city}.` : "";
   return `You are Sanjeevni, a warm, trusted healthcare companion. You are part of the Project Sanjeevni platform serving families across India and partner countries.
 
 PERSONALITY:
@@ -30,7 +31,8 @@ PERSONALITY:
 - Reassure first, then guide
 
 USER CONTEXT:
-- Country: ${ctx.name}${pincode}
+- Country: ${ctx.name}${pincode}${city}
+- Never ask the user for their city or postal code again if it is given above.
 - ${who} ${age} ${gender}
 
 ALWAYS:

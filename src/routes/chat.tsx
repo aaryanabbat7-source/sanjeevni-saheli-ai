@@ -67,7 +67,7 @@ function ChatPage() {
     messages: initialMessages,
     transport: new DefaultChatTransport({
       api: "/api/chat",
-      body: { lang, profile: { name: user?.name, age: age ?? undefined, gender: user?.gender ?? undefined, country: user?.country, pincode: user?.pincode ?? undefined } },
+      body: { lang, profile: { name: user?.name, age: age ?? undefined, gender: user?.gender ?? undefined, country: user?.country, pincode: user?.pincode ?? undefined, city: user?.city ?? undefined } },
     }),
   });
 
@@ -86,6 +86,8 @@ function ChatPage() {
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [speakingId, setSpeakingId] = useState<string | null>(null);
   const recRef = useRef<unknown>(null);
+  const cloudAudioRef = useRef<HTMLAudioElement | null>(null);
+  const cloudRecRef = useRef<(() => Promise<void>) | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const sentInitial = useRef(false);
 

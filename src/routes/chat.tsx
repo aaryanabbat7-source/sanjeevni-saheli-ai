@@ -137,29 +137,55 @@ function ChatPage() {
     );
   }
 
+  async function speakViaCloud(id: string, text: string) {
+    try {
+      const { LANG_NAME } = await import("@/lib/i18n");
+      const res = await fetch("/api/tts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: text.slice(0, 2000), langName: LANG_NAME[lang] }),
+      });
+      if (!res.ok) { setSpeakingId(null); return; }
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const audio = cloudAudioRef.current ?? new Audio();
+      cloudAudioRef.current = audio;
+      audio.src = url;
+      audio.onended = () => { setSpeakingId((s2) => (s2 === id ? null : s2)); URL.revokeObjectURL(url); };
+      audio.onerror = () => setSpeakingId((s2) => (s2 === id ? null : s2));
+      await audio.play();
+    } catch {
+      setSpeakingId(null);
+    }
+  }
+
   function speak(id: string, text: string) {
-    if (typeof window === "undefined" || !window.speechSynthesis) return;
-    window.speechSynthesis.cancel();
+    if (typeof window === "undefined") return;
+    window.speechSynthesis?.cancel();
+    if (cloudAudioRef.current) { cloudAudioRef.current.pause(); cloudAudioRef.current.currentTime = 0; }
     if (speakingId === id) { setSpeakingId(null); return; }
-    // Strip emoji, markdown decorations, icon glyphs before speaking
-    // and detect the message's actual script for language-correct voicing.
     import("@/lib/i18n").then(({ stripForTTS, detectLangFromText, bcp47 }) => {
       const clean = stripForTTS(text);
       if (!clean) return;
       const detected = detectLangFromText(clean);
-      const lang = detected ? bcp47(detected) : langCode;
-      const u = new SpeechSynthesisUtterance(clean);
-      u.lang = lang;
-      u.rate = 0.95;
-      const v = pickVoice(lang);
-      if (v) u.voice = v;
-      u.onend = () => setSpeakingId((s) => (s === id ? null : s));
-      u.onerror = () => setSpeakingId((s) => (s === id ? null : s));
-      window.speechSynthesis.speak(u);
+      const target = detected ? bcp47(detected) : langCode;
       setSpeakingId(id);
+      const v = window.speechSynthesis ? pickVoice(target) : null;
+      if (!v) {
+        // No local voice for this language → use cloud speech so every
+        // supported language can be listened to.
+        void speakViaCloud(id, clean);
+        return;
+      }
+      const u = new SpeechSynthesisUtterance(clean);
+      u.lang = target;
+      u.rate = 0.95;
+      u.voice = v;
+      u.onend = () => setSpeakingId((s2) => (s2 === id ? null : s2));
+      u.onerror = () => void speakViaCloud(id, clean);
+      window.speechSynthesis.speak(u);
     });
   }
-
 
   async function copy(id: string, text: string) {
     try {
@@ -169,16 +195,70 @@ function ChatPage() {
     } catch {/* noop */}
   }
 
+  async function startCloudRecording() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const ctx = new AudioContext();
+      const source = ctx.createMediaStreamSource(stream);
+      const node = ctx.createScriptProcessor(4096, 1, 1);
+      const chunks: Float32Array[] = [];
+      node.onaudioprocess = (e) => chunks.push(new Float32Array(e.inputBuffer.getChannelData(0)));
+      source.connect(node);
+      node.connect(ctx.destination);
+      setListening(true);
+      cloudRecRef.current = async () => {
+        stream.getTracks().forEach((t2) => t2.stop());
+        node.disconnect();
+        source.disconnect();
+        const rate = ctx.sampleRate;
+        await ctx.close();
+        setListening(false);
+        cloudRecRef.current = null;
+        const total = chunks.reduce((n, c) => n + c.length, 0);
+        if (total < rate / 2) return;
+        const pcm = new Float32Array(total);
+        let off = 0;
+        for (const c of chunks) { pcm.set(c, off); off += c.length; }
+        const buf = new ArrayBuffer(44 + pcm.length * 2);
+        const view = new DataView(buf);
+        const w = (o: number, str: string) => { for (let i = 0; i < str.length; i++) view.setUint8(o + i, str.charCodeAt(i)); };
+        w(0, "RIFF"); view.setUint32(4, 36 + pcm.length * 2, true); w(8, "WAVEfmt ");
+        view.setUint32(16, 16, true); view.setUint16(20, 1, true); view.setUint16(22, 1, true);
+        view.setUint32(24, rate, true); view.setUint32(28, rate * 2, true);
+        view.setUint16(32, 2, true); view.setUint16(34, 16, true);
+        w(36, "data"); view.setUint32(40, pcm.length * 2, true);
+        for (let i = 0; i < pcm.length; i++) {
+          const sm = Math.max(-1, Math.min(1, pcm[i]));
+          view.setInt16(44 + i * 2, sm < 0 ? sm * 0x8000 : sm * 0x7fff, true);
+        }
+        const fd = new FormData();
+        fd.append("file", new Blob([buf], { type: "audio/wav" }), "recording.wav");
+        fd.append("language", lang.slice(0, 2));
+        const res = await fetch("/api/stt", { method: "POST", body: fd });
+        if (!res.ok) return;
+        const { text } = (await res.json()) as { text?: string };
+        if (text?.trim()) { setInput(text.trim()); handleSend(text.trim()); }
+      };
+    } catch {
+      setListening(false);
+      alert("Microphone access is needed for voice input.");
+    }
+  }
+
   function toggleMic() {
     if (typeof window === "undefined") return;
+    if (cloudRecRef.current) { void cloudRecRef.current(); return; }
     const SR = (window as unknown as { webkitSpeechRecognition?: new () => unknown; SpeechRecognition?: new () => unknown }).SpeechRecognition
       ?? (window as unknown as { webkitSpeechRecognition?: new () => unknown }).webkitSpeechRecognition;
-    if (!SR) { alert("Voice input is not supported in this browser. Please type your question."); return; }
     if (listening) {
       (recRef.current as { stop?: () => void } | null)?.stop?.();
       setListening(false);
       return;
     }
+    // Browser recognition only reliably supports a few languages — for the
+    // rest, record and transcribe in the cloud.
+    const localOk = SR && ["en", "hi", "bn", "ta", "te", "ml", "kn", "gu", "mr", "pa", "ur", "ar", "ne", "sw"].includes(lang);
+    if (!localOk) { void startCloudRecording(); return; }
     const rec = new (SR as new () => {
       lang: string; continuous: boolean; interimResults: boolean;
       onresult: (e: { results: ArrayLike<ArrayLike<{ transcript: string }>> }) => void;
@@ -191,7 +271,7 @@ function ChatPage() {
       handleSend(text);
     };
     rec.onend = () => setListening(false);
-    rec.onerror = () => setListening(false);
+    rec.onerror = () => { setListening(false); void startCloudRecording(); };
     rec.start();
     setListening(true);
     recRef.current = rec;

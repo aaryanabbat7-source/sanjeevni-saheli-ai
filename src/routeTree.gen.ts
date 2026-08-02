@@ -30,6 +30,7 @@ import { Route as OnboardingCountryRouteImport } from './routes/onboarding.count
 import { Route as EmployeeLoginRouteImport } from './routes/employee.login'
 import { Route as ApiTtsRouteImport } from './routes/api/tts'
 import { Route as ApiTranslateRouteImport } from './routes/api/translate'
+import { Route as ApiSttRouteImport } from './routes/api/stt'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 
 const WelcomeRoute = WelcomeRouteImport.update({
@@ -137,6 +138,11 @@ const ApiTranslateRoute = ApiTranslateRouteImport.update({
   path: '/api/translate',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiSttRoute = ApiSttRouteImport.update({
+  id: '/api/stt',
+  path: '/api/stt',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiChatRoute = ApiChatRouteImport.update({
   id: '/api/chat',
   path: '/api/chat',
@@ -153,6 +159,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof SettingsRoute
   '/welcome': typeof WelcomeRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/stt': typeof ApiSttRoute
   '/api/translate': typeof ApiTranslateRoute
   '/api/tts': typeof ApiTtsRoute
   '/employee/login': typeof EmployeeLoginRoute
@@ -177,6 +184,7 @@ export interface FileRoutesByTo {
   '/settings': typeof SettingsRoute
   '/welcome': typeof WelcomeRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/stt': typeof ApiSttRoute
   '/api/translate': typeof ApiTranslateRoute
   '/api/tts': typeof ApiTtsRoute
   '/employee/login': typeof EmployeeLoginRoute
@@ -202,6 +210,7 @@ export interface FileRoutesById {
   '/settings': typeof SettingsRoute
   '/welcome': typeof WelcomeRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/stt': typeof ApiSttRoute
   '/api/translate': typeof ApiTranslateRoute
   '/api/tts': typeof ApiTtsRoute
   '/employee/login': typeof EmployeeLoginRoute
@@ -228,6 +237,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/welcome'
     | '/api/chat'
+    | '/api/stt'
     | '/api/translate'
     | '/api/tts'
     | '/employee/login'
@@ -252,6 +262,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/welcome'
     | '/api/chat'
+    | '/api/stt'
     | '/api/translate'
     | '/api/tts'
     | '/employee/login'
@@ -276,6 +287,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/welcome'
     | '/api/chat'
+    | '/api/stt'
     | '/api/translate'
     | '/api/tts'
     | '/employee/login'
@@ -301,6 +313,7 @@ export interface RootRouteChildren {
   SettingsRoute: typeof SettingsRoute
   WelcomeRoute: typeof WelcomeRoute
   ApiChatRoute: typeof ApiChatRoute
+  ApiSttRoute: typeof ApiSttRoute
   ApiTranslateRoute: typeof ApiTranslateRoute
   ApiTtsRoute: typeof ApiTtsRoute
   EmployeeLoginRoute: typeof EmployeeLoginRoute
@@ -465,6 +478,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiTranslateRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/stt': {
+      id: '/api/stt'
+      path: '/api/stt'
+      fullPath: '/api/stt'
+      preLoaderRoute: typeof ApiSttRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/chat': {
       id: '/api/chat'
       path: '/api/chat'
@@ -485,6 +505,7 @@ const rootRouteChildren: RootRouteChildren = {
   SettingsRoute: SettingsRoute,
   WelcomeRoute: WelcomeRoute,
   ApiChatRoute: ApiChatRoute,
+  ApiSttRoute: ApiSttRoute,
   ApiTranslateRoute: ApiTranslateRoute,
   ApiTtsRoute: ApiTtsRoute,
   EmployeeLoginRoute: EmployeeLoginRoute,

@@ -683,9 +683,9 @@ const or: Dict = {
 
 export const t: Record<Lang, Dict> = {
   en, hi, bn, or,
-  pa: en, gu: en, mr: en, ta: en, te: en, ml: en, kn: en,
-  dz: en, ne: en, sw: en, ha: en, ar: en, lg: en,
-  ur: en, so: en, am: en,
+  pa: g.pa, gu: g.gu, mr: g.mr, ta: g.ta, te: g.te, ml: g.ml, kn: g.kn,
+  dz: g.dz, ne: g.ne, sw: g.sw, ha: g.ha, ar: g.ar, lg: g.lg,
+  ur: g.ur, so: g.so, am: g.am,
 };
 export type { Dict };
 

@@ -1,7 +1,7 @@
 // AUTO-GENERATED UI translations. Do not edit by hand.
 import type { Dict } from "./i18n";
 
-export const ar: Dict = {
+export const ar: Partial<Dict> = {
   "appName": "Sanjeevni Saheli AI",
   "tagline": "رفيقتك الموثوقة للصحة",
   "chooseLang": "اختر لغتك",
@@ -319,7 +319,7 @@ export const ar: Dict = {
   "deleteChat": "حذف المحادثة"
 };
 
-export const mr: Dict = {
+export const mr: Partial<Dict> = {
   "appName": "संजीवनी सहेली AI",
   "tagline": "आपकी विश्वसनीय स्वास्थ्य साथी",
   "chooseLang": "अपनी भाषा चुनें",
@@ -637,7 +637,7 @@ export const mr: Dict = {
   "deleteChat": "चैट हटाएं"
 };
 
-export const gu: Dict = {
+export const gu: Partial<Dict> = {
   "appName": "સંજીવની સહેલી AI",
   "tagline": "તમારી વિશ્વસનીય સ્વાસ્થ્ય સાથી",
   "chooseLang": "તમારી ભાષા પસંદ કરો",
@@ -955,7 +955,7 @@ export const gu: Dict = {
   "deleteChat": "ચેટ કાઢી નાખો"
 };
 
-export const ur: Dict = {
+export const ur: Partial<Dict> = {
   "appName": "سنجیونی سہیلی AI",
   "tagline": "آپکی بھروسہ مند صحت ساتھی",
   "chooseLang": "اپنی زبان منتخب کریں",
@@ -1273,7 +1273,7 @@ export const ur: Dict = {
   "deleteChat": "چیٹ حذف کریں"
 };
 
-export const ta: Dict = {
+export const ta: Partial<Dict> = {
   "appName": "சஞ்சீவ்னி சஹேலி AI",
   "tagline": "உங்கள் நம்பகமான சுகாதாரத் துணை",
   "chooseLang": "உங்கள் மொழியைத் தேர்ந்தெடுக்கவும்",
@@ -1591,7 +1591,7 @@ export const ta: Dict = {
   "deleteChat": "அரட்டையை நீக்கவும்"
 };
 
-export const ml: Dict = {
+export const ml: Partial<Dict> = {
   "appName": "സഞ്ജീവനി സഖി AI",
   "tagline": "നിങ്ങളുടെ വിശ്വസ്ത ആരോഗ്യ കൂട്ടാളി",
   "chooseLang": "നിങ്ങളുടെ ഭാഷ തിരഞ്ഞെടുക്കുക",
@@ -1909,7 +1909,7 @@ export const ml: Dict = {
   "deleteChat": "ചാറ്റ് ഇല്ലാതാക്കുക"
 };
 
-export const sw: Dict = {
+export const sw: Partial<Dict> = {
   "appName": "Sanjeevni Saheli AI",
   "tagline": "Rafiki yako unayemwamini wa Afya",
   "chooseLang": "Chagua lugha yako",
@@ -2227,7 +2227,7 @@ export const sw: Dict = {
   "deleteChat": "Futa mazungumzo"
 };
 
-export const ne: Dict = {
+export const ne: Partial<Dict> = {
   "appName": "सञ्जीवनी सहेली एआई",
   "tagline": "तपाईंको विश्वसनीय स्वास्थ्य साथी",
   "chooseLang": "आफ्नो भाषा छान्नुहोस्",
@@ -2545,7 +2545,7 @@ export const ne: Dict = {
   "deleteChat": "च्याट मेटाउनुहोस्"
 };
 
-export const kn: Dict = {
+export const kn: Partial<Dict> = {
   "appName": "ಸಂಜೀವ್ನಿ ಸಹೇಲಿ AI",
   "tagline": "ನಿಮ್ಮ ವಿಶ್ವಾಸಾರ್ಹ ಆರೋಗ್ಯ ಸಂಗಾತಿ",
   "chooseLang": "ನಿಮ್ಮ ಭಾಷೆಯನ್ನು ಆರಿಸಿಕೊಳ್ಳಿ",
@@ -2863,7 +2863,7 @@ export const kn: Dict = {
   "deleteChat": "ಚಾಟ್ ಅಳಿಸಿ"
 };
 
-export const te: Dict = {
+export const te: Partial<Dict> = {
   "appName": "సంజీవని సఖి AI",
   "tagline": "మీ నమ్మకమైన ఆరోగ్య సహచరి",
   "chooseLang": "మీ భాషను ఎంచుకోండి",
@@ -3181,7 +3181,7 @@ export const te: Dict = {
   "deleteChat": "చాట్‌ను తొలగించండి"
 };
 
-export const ha: Dict = {
+export const ha: Partial<Dict> = {
   "appName": "Sanjeevni Saheli AI",
   "tagline": "A Abokinka na Lafiya",
   "chooseLang": "Zaɓi Harshenka",
@@ -3499,7 +3499,7 @@ export const ha: Dict = {
   "deleteChat": "Share tattaunawa"
 };
 
-export const am: Dict = {
+export const am: Partial<Dict> = {
   "appName": "ሳንጄቭኒ ሳሄሊ AI",
   "tagline": "የእርስዎ የታመነ የጤና አጋር",
   "chooseLang": "ቋንቋዎን ይምረጡ",
@@ -3817,7 +3817,7 @@ export const am: Dict = {
   "deleteChat": "ውይይት ሰርዝ"
 };
 
-export const pa: Dict = {
+export const pa: Partial<Dict> = {
   "appName": "ਸੰਜੀਵਨੀ ਸਹੇਲੀ AI",
   "tagline": "ਤੁਹਾਡੀ ਭਰੋਸੇਮੰਦ ਸਿਹਤ ਸਾਥਣ",
   "chooseLang": "ਆਪਣੀ ਭਾਸ਼ਾ ਚੁਣੋ",
@@ -4135,7 +4135,7 @@ export const pa: Dict = {
   "deleteChat": "ਗੱਲਬਾਤ ਮਿਟਾਓ"
 };
 
-export const so: Dict = {
+export const so: Partial<Dict> = {
   "appName": "Sanjeevni Saheli AI",
   "tagline": "Wadada Caafimaadka ee laguu aaminay",
   "chooseLang": "Dooro luqaddaada",
@@ -4453,7 +4453,7 @@ export const so: Dict = {
   "deleteChat": "Tirtir wadahadalka"
 };
 
-export const lg: Dict = {
+export const lg: Partial<Dict> = {
   "appName": "Sanjeevni Saheli AI",
   "tagline": "Munywanyi wo ow'obulamu gw'osalirako amagezi",
   "chooseLang": "Londa olulimi",
@@ -4771,7 +4771,7 @@ export const lg: Dict = {
   "deleteChat": "Ggyawo okwogera"
 };
 
-export const dz: Dict = {
+export const dz: Partial<Dict> = {
   "appName": "སཉ་ཇི་ཝ་ནི་ ས་ཧེ་ལི་ ཨའི་ཨའི་",
   "tagline": "ཁྱོད་ཀྱི་ཡིད་ཆེས་འཕྲོད་བསྟེན་གྲོགས་པོ།",
   "chooseLang": "སྐད་ཡིག་འདེམས་རོགས།",

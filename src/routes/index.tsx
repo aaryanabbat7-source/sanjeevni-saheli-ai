@@ -74,7 +74,7 @@ function Landing() {
             transition={{ delay: 0.1 }}
             className="inline-flex items-center gap-2 rounded-full glass px-3 py-1.5 text-xs font-semibold text-primary"
           >
-            <Sparkles className="size-3.5" /> A youth-led healthcare initiative for India
+            <Sparkles className="size-3.5" /> A student-led healthcare initiative for India
           </motion.div>
           <h1 className="mt-5 text-4xl md:text-6xl font-extrabold leading-[1.05] tracking-tight">
             Healthcare guidance for <span className="text-gradient">every Indian family</span>
@@ -252,7 +252,7 @@ function Landing() {
           <div className="size-20 rounded-2xl bg-gradient-primary grid place-items-center text-3xl shadow-glow">🌍</div>
           <div className="flex-1 text-center md:text-left">
             <div className="text-xs uppercase tracking-widest text-primary font-bold">Our Mission</div>
-            <h3 className="mt-1 text-2xl font-bold">A youth-led initiative for a healthier India</h3>
+            <h3 className="mt-1 text-2xl font-bold">A student-led initiative for a healthier India</h3>
             <p className="mt-2 text-muted-foreground text-sm max-w-2xl">
               Sanjeevni Saheli AI is built as a non-profit, open-access health companion. Our mission: empower every woman, mother and family with the right health information, in their own language.
             </p>

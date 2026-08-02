@@ -50,7 +50,7 @@ function Dashboard() {
       <div className="mx-auto max-w-5xl px-5 pb-8">
         <motion.div initial={{ y: 12, opacity: 0 }} animate={{ y: 0, opacity: 1 }}>
           <p className="text-sm text-muted-foreground">{dict.greeting}</p>
-          <h1 className="text-3xl md:text-4xl font-bold">{user.name} 💖</h1>
+          <h1 className="text-3xl md:text-4xl font-bold">{user.name}</h1>
           <p className="mt-2 text-muted-foreground">{dict.dashboardSub}</p>
         </motion.div>
 

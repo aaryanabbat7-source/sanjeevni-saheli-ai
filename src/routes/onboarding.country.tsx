@@ -7,6 +7,7 @@ import { StickyContinue } from "@/components/StickyContinue";
 import { COUNTRIES, getCountry } from "@/lib/countries";
 import { t } from "@/lib/i18n";
 import { setDraft, useDraft } from "@/lib/user-store";
+import { lookupPostal } from "@/lib/postal";
 
 export const Route = createFileRoute("/onboarding/country")({
   component: CountryPage,
@@ -19,15 +20,20 @@ function CountryPage() {
   const [code, setCode] = useState(draft.country ?? "IN");
   const [pincode, setPincode] = useState(draft.pincode ?? "");
   const [error, setError] = useState("");
+  const [city, setCity] = useState<string | null>(null);
+  const [checking, setChecking] = useState(false);
   const country = getCountry(code);
 
-  function submit(e?: React.FormEvent) {
+  async function submit(e?: React.FormEvent) {
     e?.preventDefault();
     const trimmed = pincode.trim();
-    if (trimmed && country.pincodeRegex && !country.pincodeRegex.test(trimmed)) {
-      return setError(`Please enter a valid ${country.name} ${country.pincodeLabel.replace(" (optional)", "")}.`);
-    }
-    setDraft({ country: code, pincode: trimmed || undefined });
+    setError("");
+    setChecking(true);
+    const res = await lookupPostal(code, trimmed);
+    setChecking(false);
+    if (!res.ok) { setCity(null); return setError(res.error ?? "Invalid postal code."); }
+    setCity(res.city ?? null);
+    setDraft({ country: code, pincode: trimmed || undefined, city: res.city ?? null });
     nav({ to: "/onboarding/language" });
   }
 

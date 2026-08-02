@@ -9,6 +9,7 @@ import { t } from "@/lib/i18n";
 import { useUser, useAuthReady, useHasSession, updateActiveLocale } from "@/lib/user-store";
 import { TOPICS } from "@/lib/topics";
 import { COUNTRIES, getCountry } from "@/lib/countries";
+import { lookupPostal } from "@/lib/postal";
 
 export const Route = createFileRoute("/dashboard")({
   component: Dashboard,
@@ -135,7 +136,7 @@ function Dashboard() {
 
 const DISMISS_KEY = "sanjeevni.locale-prompt-dismissed.v1";
 
-function LocationPrompt({ user }: { user: { id: string; country: string; pincode: string | null } }) {
+function LocationPrompt({ user }: { user: { id: string; country: string; pincode: string | null; city: string | null } }) {
   const [dismissed, setDismissed] = useState<boolean>(() => {
     if (typeof window === "undefined") return true;
     try { return window.localStorage.getItem(`${DISMISS_KEY}.${user.id}`) === "1"; } catch { return false; }
@@ -155,12 +156,13 @@ function LocationPrompt({ user }: { user: { id: string; country: string; pincode
   async function save() {
     setBusy(true);
     const trimmed = pin.trim();
-    if (trimmed && country.pincodeRegex && !country.pincodeRegex.test(trimmed)) {
+    const check = await lookupPostal(code, trimmed);
+    if (!check.ok) {
       setBusy(false);
-      alert(`Please enter a valid ${country.name} postal code.`);
+      alert(check.error ?? "Invalid postal code.");
       return;
     }
-    await updateActiveLocale({ country: code, pincode: trimmed || null });
+    await updateActiveLocale({ country: code, pincode: trimmed || null, city: check.city ?? null });
     setBusy(false);
     close();
   }
